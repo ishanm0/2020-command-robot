@@ -9,11 +9,14 @@ package frc.robot.commands.trench;
 
 import com.revrobotics.ColorMatchResult;
 import com.revrobotics.ColorSensorV3;
+import com.ctre.phoenix.motorcontrol.ControlMode;
+import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import com.revrobotics.ColorMatch;
 
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.CommandBase;
+import frc.robot.Constants;
 import frc.robot.Constants.TrenchConstants;
 import frc.robot.subsystems.TrenchSubsystem;
 
@@ -58,6 +61,31 @@ public class Rotation extends CommandBase {
 
         colorCount = 0;
         tempCount = 0;
+
+        /* Factory Default all hardware to prevent unexpected behaviour */
+        m_trenchTalon.configFactoryDefault();
+
+        /* Config sensor used for Primary PID [Velocity] */
+        m_trenchTalon.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, TrenchConstants.kPIDLoopIdx,
+                Constants.kTimeoutMs);
+
+        /**
+         * Phase sensor accordingly. Positive Sensor Reading should match Green
+         * (blinking) Leds on Talon
+         */
+        m_trenchTalon.setSensorPhase(TrenchConstants.kSensorPhase);
+
+        /* Config the peak and nominal outputs */
+        m_trenchTalon.configNominalOutputForward(0, Constants.kTimeoutMs);
+        m_trenchTalon.configNominalOutputReverse(0, Constants.kTimeoutMs);
+        m_trenchTalon.configPeakOutputForward(1, Constants.kTimeoutMs);
+        m_trenchTalon.configPeakOutputReverse(-1, Constants.kTimeoutMs);
+
+        /* Config the Velocity closed loop gains in slot0 */
+		m_trenchTalon.config_kF(TrenchConstants.kPIDLoopIdx, TrenchConstants.kF, Constants.kTimeoutMs);
+		m_trenchTalon.config_kP(TrenchConstants.kPIDLoopIdx, TrenchConstants.kP, Constants.kTimeoutMs);
+		m_trenchTalon.config_kI(TrenchConstants.kPIDLoopIdx, TrenchConstants.kI, Constants.kTimeoutMs);
+		m_trenchTalon.config_kD(TrenchConstants.kPIDLoopIdx, TrenchConstants.kD, Constants.kTimeoutMs);
     }
 
     @Override
@@ -69,9 +97,10 @@ public class Rotation extends CommandBase {
         boolean colorMatched = match.color == setColor;
 
         if (colorCount < maxRotations * 2) {
-            m_trenchTalon.set(rotationSpeed);
+            // m_trenchTalon.set(rotationSpeed);
+            m_trenchTalon.set(ControlMode.Velocity, TrenchConstants.kVelocity);
         } else {
-            m_trenchTalon.set(0);
+            m_trenchTalon.set(ControlMode.PercentOutput, 0);
 
             complete = true;
         }
