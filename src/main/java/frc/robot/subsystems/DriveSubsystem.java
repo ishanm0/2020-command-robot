@@ -11,28 +11,18 @@ import java.util.Map;
 
 import com.analog.adis16470.frc.ADIS16470_IMU;
 
-import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
-import edu.wpi.first.networktables.NetworkTableEntry;
-
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
-
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 
-import edu.wpi.first.wpilibj.geometry.Pose2d;
-import edu.wpi.first.wpilibj.geometry.Rotation2d;
-
-import edu.wpi.first.wpilibj.kinematics.DifferentialDriveOdometry;
-import edu.wpi.first.wpilibj.kinematics.DifferentialDriveWheelSpeeds;
-
+import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
-import frc.robot.Constants;
 import frc.robot.Constants.*;
 
 public class DriveSubsystem extends SubsystemBase {
@@ -63,51 +53,8 @@ public class DriveSubsystem extends SubsystemBase {
             .withProperties(Map.of("min", 0, "max", 1))
             .getEntry();
 
-    DifferentialDriveOdometry m_odometry = new DifferentialDriveOdometry(getAngle(),
-            new Pose2d(0.0, 0.0, new Rotation2d()));
-
     public DriveSubsystem() {
-        m_leftTalon1.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, Constants.kTimeoutMs);
-        m_rightTalon1.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, 0, Constants.kTimeoutMs);
-
-        resetEncoders();
-    }
-
-    /**
-     * Returns the angle of the robot as a Rotation2d.
-     *
-     * @return The angle of the robot.
-     */
-    public Rotation2d getAngle() {
-        // Negating the angle because WPILib gyros are CW positive.
-        return Rotation2d.fromDegrees(m_imu.getAngle() * (DriveConstants.kGyroReversed ? 1.0 : -1.0));
-    }
-
-    @Override
-    public void periodic() {
-        // Update the odometry in the periodic block
-        m_odometry.update(getAngle(), m_leftTalon1.getSelectedSensorPosition(),
-                m_rightTalon1.getSelectedSensorPosition());
-
-    }
-
-    /**
-     * Returns the currently-estimated pose of the robot.
-     *
-     * @return The pose.
-     */
-    public Pose2d getPose() {
-        return m_odometry.getPoseMeters();
-    }
-
-    /**
-     * Resets the odometry to the specified pose.
-     *
-     * @param pose The pose to which to set the odometry.
-     */
-    public void resetOdometry(Pose2d pose) {
-        resetEncoders();
-        m_odometry.resetPosition(pose, getAngle());
+        
     }
     
     /**
@@ -137,25 +84,6 @@ public class DriveSubsystem extends SubsystemBase {
     }
 
     /**
-     * Resets the drive encoders to currently read a position of 0.
-     */
-    public void resetEncoders() {
-        m_leftTalon1.getSensorCollection().setQuadraturePosition(0, Constants.kTimeoutMs);
-        m_rightTalon1.getSensorCollection().setQuadraturePosition(0, Constants.kTimeoutMs);
-    }
-
-    /**
-     * Gets the current wheel speeds.
-     *
-     * @return the current wheel speeds in a MecanumDriveWheelSpeeds object.
-     */
-
-    public DifferentialDriveWheelSpeeds getCurrentWheelSpeeds() {
-        return new DifferentialDriveWheelSpeeds(m_leftTalon1.getSelectedSensorVelocity(),
-                m_rightTalon1.getSelectedSensorVelocity());
-    }
-
-    /**
      * Sets the max output of the drive. Useful for scaling the drive to drive more
      * slowly.
      *
@@ -178,27 +106,7 @@ public class DriveSubsystem extends SubsystemBase {
     public boolean getTank() {
         return tank;
     }
-
-    /**
-     * Controls the left and right sides of the drive directly with voltages.
-     *
-     * @param leftVolts  the commanded left output
-     * @param rightVolts the commanded right output
-     */
-    public void tankDriveVolts(double leftVolts, double rightVolts) {
-        m_leftDrive.setVoltage(leftVolts);
-        m_rightDrive.setVoltage(-rightVolts);
-    }
-
-    /**
-     * Gets the average distance of the two encoders.
-     *
-     * @return the average of the two encoder readings
-     */
-    public double getAverageEncoderDistance() {
-        return (m_leftTalon1.getSelectedSensorPosition() + m_rightTalon1.getSelectedSensorPosition()) / 2.0;
-    }
-
+    
     /**
      * Zeroes the heading of the robot.
      */
