@@ -99,9 +99,6 @@ public class AutoShooter extends StartEndCommand {
         xPixelShift = xEntry.getDouble(0);
         yPixelShift = yEntry.getDouble(0);
 
-        // double xShift = xPixelShift / Shooter.kPixelWidth;
-        // double yShift = yPixelShift / Shooter.kPixelHeight;
-
         if (Math.abs(xShift()) > 0) {
             new ArcadeDrive(m_drive, this::zero, this::xShift);
         } else if (Math.abs(yShift()) > 0) {

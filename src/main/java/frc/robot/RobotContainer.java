@@ -18,13 +18,13 @@ import frc.robot.commands.shooter.FinishShooter;
 import frc.robot.commands.shooter.ShooterToggleTrigger;
 import frc.robot.commands.shooter.StartShooter;
 import frc.robot.commands.shooter.ToggleShooter;
-import frc.robot.commands.trench.Position;
-import frc.robot.commands.trench.Rotation;
+/* import frc.robot.commands.trench.Position;
+import frc.robot.commands.trench.Rotation; */
 
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
-import frc.robot.subsystems.TrenchSubsystem;
+// import frc.robot.subsystems.TrenchSubsystem;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -41,7 +41,7 @@ public class RobotContainer {
     private final DriveSubsystem m_drive = new DriveSubsystem();
     private final IntakeSubsystem m_intake = new IntakeSubsystem();
     private final ShooterSubsystem m_shooter = new ShooterSubsystem();
-    private final TrenchSubsystem m_trench = new TrenchSubsystem();
+    // private final TrenchSubsystem m_trench = new TrenchSubsystem();
 
     // The default driving command
     private final Drive m_driveCommand = new Drive(m_drive, OIConstants.joysticks[0], OIConstants.joysticks[1]);
@@ -67,11 +67,6 @@ public class RobotContainer {
      * passing it to a {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
      */
     private void configureButtonBindings() {
-        /*
-         * new JoystickButton(OIConstants.joysticks[OIConstants.kDriveToggle[0]],
-         * OIConstants.kDriveToggle[1]) .whenPressed(() -> m_drive.toggleMode());
-         */
-
         new JoystickButton(OIConstants.joysticks[OIConstants.kIntakeControl[0]], OIConstants.kIntakeControl[1])
                 .whenPressed(() -> new StartIntake(m_intake))
                 .whenReleased(() -> new FinishIntake(m_intake));
@@ -87,13 +82,6 @@ public class RobotContainer {
 
         new ShooterToggleTrigger()
                 .whenActive(() -> new ToggleShooter(m_shooter));
-        /*
-         * new JoystickButton(joysticks[OIConstants.kStartIntake[0]],
-         * OIConstants.kStartIntake[1]) .whenPressed(() -> new StartIntake(m_intake));
-         * 
-         * new JoystickButton(joysticks[OIConstants.kStopIntake[0]],
-         * OIConstants.kStopIntake[1]) .whenPressed(() -> new StopIntake(m_intake));
-         */
 
         /*
          * new JoystickButton(joysticks[OIConstants.kRotation[0]],

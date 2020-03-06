@@ -56,12 +56,6 @@ public final class Constants {
 
         public static final Joystick[] joysticks = { kLeftJoystick, kRightJoystick };
 
-        // public static final int[] kDriveToggle = { 1, 2 }; // right joystick, thumb side button
-
-        /*
-         * public static final int[] kStartIntake = { 0, 1 }; public static final int[]
-         * kStopIntake = { 1, 1 };
-         */
         public static final int[] kIntakeControl = { 0, 1 }; // left joystick, trigger
 
         public static final int[] kAutoShooterControl = { 1, 1 }; // right joystick, trigger

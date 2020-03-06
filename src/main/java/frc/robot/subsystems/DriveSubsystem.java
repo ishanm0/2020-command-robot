@@ -46,18 +46,26 @@ public class DriveSubsystem extends SubsystemBase {
     private final ADIS16470_IMU kIMU = DriveConstants.kIMU;
 
     private double insanityFactor = 0.5;
-    // private double oldThrottle = 0;
 
-    public static boolean tank = false;
+    public static boolean tank = true;
 
     private ShuffleboardTab tab = Shuffleboard.getTab("SmartDashboard");
     private NetworkTableEntry insanityFactorEntry = tab.add("insanityFactor", insanityFactor)
             .withWidget(BuiltInWidgets.kNumberSlider)
             .withProperties(Map.of("min", 0, "max", 1))
             .getEntry();
+    private NetworkTableEntry driveToggleEntry = tab.add("driveToggle", tank)
+            .withWidget(BuiltInWidgets.kToggleButton)
+            .getEntry();
 
     public DriveSubsystem() {
         
+    }
+
+    @Override
+    public void periodic() {
+        insanityFactor = insanityFactorEntry.getDouble(insanityFactor);
+        tank = driveToggleEntry.getBoolean(tank);
     }
     
     /**
@@ -66,10 +74,7 @@ public class DriveSubsystem extends SubsystemBase {
      * @param leftSpeed speed for left wheels
      * @param rightSpeed speed for right wheels
      */
-    // @SuppressWarnings("ParameterName")
     public void tankDrive(double leftSpeed, double rightSpeed) {
-        insanityFactor = insanityFactorEntry.getDouble(insanityFactor);
-
         m_drive.tankDrive(insanityFactor * leftSpeed, insanityFactor * rightSpeed);
     }
 
@@ -79,28 +84,10 @@ public class DriveSubsystem extends SubsystemBase {
      * @param ySpeed speed in forward/backward direction
      * @param zSpeed rotational speed
      */
-    // @SuppressWarnings("ParameterName")
     public void arcadeDrive(double ySpeed, double zSpeed) {
         insanityFactor = insanityFactorEntry.getDouble(insanityFactor);
 
         m_drive.arcadeDrive(insanityFactor * ySpeed, insanityFactor * zSpeed);
-    }
-
-    /**
-     * Sets the max output of the drive. Useful for scaling the drive to drive more
-     * slowly.
-     *
-     * @param maxOutput the maximum output to which the drive will be constrained
-     */
-    public void setMaxOutput(double maxOutput) {
-        m_drive.setMaxOutput(maxOutput);
-    }
-
-    /**
-     * Switch between tank and arcade driving
-     */
-    public void toggleMode() {
-        tank = !tank;
     }
 
     /**

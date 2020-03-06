@@ -36,8 +36,6 @@ public class Rotation extends CommandBase {
     private double confidenceThreshold = TrenchConstants.kConfidenceThreshold;
     private int maxRotations = TrenchConstants.kMaxRotations;
 
-    // private double rotationSpeed = TrenchConstants.kRotationSpeed;
-
     private ColorMatch colorMatcher;
     private ColorSensorV3 colorSensor;
 
@@ -101,7 +99,6 @@ public class Rotation extends CommandBase {
         boolean colorMatched = match.color == setColor;
 
         if (colorCount < maxRotations * 2) {
-            // m_trenchTalon.set(rotationSpeed);
             m_trenchTalon.set(ControlMode.Velocity, TrenchConstants.kVelocity);
         } else {
             m_trenchTalon.set(ControlMode.PercentOutput, 0);
