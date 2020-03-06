@@ -10,16 +10,32 @@ package frc.robot;
 import frc.robot.Constants.OIConstants;
 
 import frc.robot.commands.drive.Drive;
+
 import frc.robot.commands.intake.FinishIntake;
 import frc.robot.commands.intake.StartIntake;
 
 import frc.robot.commands.shooter.AutoShooter;
-import frc.robot.commands.shooter.FinishShooter;
-import frc.robot.commands.shooter.ShooterToggleTrigger;
+
 import frc.robot.commands.shooter.StartShooter;
+import frc.robot.commands.shooter.FinishShooter;
+
+import frc.robot.commands.shooter.RunShooter;
+import frc.robot.commands.shooter.StopShooter;
+import frc.robot.commands.shooter.KillShooter;
 import frc.robot.commands.shooter.ToggleShooter;
+
+import frc.robot.commands.shooter.RunFeeder;
+import frc.robot.commands.shooter.ReverseFeeder;
+import frc.robot.commands.shooter.StopFeeder;
+import frc.robot.commands.shooter.KillFeeder;
+
 /* import frc.robot.commands.trench.Position;
 import frc.robot.commands.trench.Rotation; */
+
+import frc.robot.dpad.DPadDown;
+import frc.robot.dpad.DPadLeft;
+import frc.robot.dpad.DPadRight;
+import frc.robot.dpad.DPadUp;
 
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
@@ -80,9 +96,30 @@ public class RobotContainer {
                 .whenPressed(() -> new StartShooter(m_shooter))
                 .whenReleased(() -> new FinishShooter(m_shooter));
 
-        new ShooterToggleTrigger()
+        new DPadUp(OIConstants.kRunShooterStick)
+                .whenActive(() -> new RunShooter(m_shooter));
+
+        new DPadDown(OIConstants.kToggleShooterStick)
                 .whenActive(() -> new ToggleShooter(m_shooter));
 
+        new DPadRight(OIConstants.kKillShooterStick)
+                .whenActive(() -> new KillShooter(m_shooter));
+
+        new DPadLeft(OIConstants.kStopShooterStick)
+                .whenActive(() -> new StopShooter(m_shooter));
+
+        new DPadUp(OIConstants.kRunFeederStick)
+                .whenActive(() -> new RunFeeder(m_shooter));
+
+        new DPadDown(OIConstants.kReverseFeederStick)
+                .whenActive(() -> new ReverseFeeder(m_shooter));
+
+        new DPadRight(OIConstants.kKillFeederStick)
+                .whenActive(() -> new KillFeeder(m_shooter));
+
+        new DPadLeft(OIConstants.kStopFeederStick)
+                .whenActive(() -> new StopFeeder(m_shooter));
+        
         /*
          * new JoystickButton(joysticks[OIConstants.kRotation[0]],
          * OIConstants.kRotation[1]) .whenPressed(() -> new Rotation(m_trench));

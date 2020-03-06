@@ -61,7 +61,15 @@ public final class Constants {
         public static final int[] kAutoShooterControl = { 1, 1 }; // right joystick, trigger
         public static final int[] kManualShooterControl = { 1, 2 }; // right joystick, thumb side button
 
-        public static final int[] kShooterToggle = {1, 157, 202};
+        public static final int kToggleShooterStick = 1;
+        public static final int kRunShooterStick = 1;
+        public static final int kStopShooterStick = 1;
+        public static final int kKillShooterStick = 1;
+
+        public static final int kRunFeederStick = 0;
+        public static final int kStopFeederStick = 0;
+        public static final int kKillFeederStick = 0;
+        public static final int kReverseFeederStick = 0;
 
         public static final int[] kRotation = { 0, 3 }; // left joystick, bottom left thumb button
         public static final int[] kPosition = { 0, 4 }; // left joystick, bottom right thumb button

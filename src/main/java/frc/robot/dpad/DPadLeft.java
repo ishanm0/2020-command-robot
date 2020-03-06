@@ -5,19 +5,25 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands.shooter;
+package frc.robot.dpad;
 
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 import frc.robot.Constants.OIConstants;
 
 /**
- * Trigger to switch shooting modes - DPad down
+ * DPad Left Trigger
  */
-public class ShooterToggleTrigger extends Trigger {
+public class DPadLeft extends Trigger {
+    private int id;
+
+    public DPadLeft(int joyID) {
+        id = joyID;
+    }
+
     @Override
     public boolean get() {
-        return OIConstants.joysticks[OIConstants.kShooterToggle[0]].getPOV(0) <= OIConstants.kShooterToggle[2]
-                && OIConstants.joysticks[OIConstants.kShooterToggle[0]].getPOV(0) >= OIConstants.kShooterToggle[1];
+        return OIConstants.joysticks[id].getPOV(0) <= 247
+                && OIConstants.joysticks[id].getPOV(0) >= 292;
     }
 }
