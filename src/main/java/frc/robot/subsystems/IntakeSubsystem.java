@@ -12,15 +12,19 @@ import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+
 import frc.robot.Constants.IntakeConstants;
 
+/**
+ * Intake Subsystem, contains objects and methods needed to use and control the intake
+ */
 public class IntakeSubsystem extends SubsystemBase {
     private final DoubleSolenoid m_intakeSolenoid = new DoubleSolenoid(IntakeConstants.kIntakeSolenoidPorts[0], IntakeConstants.kIntakeSolenoidPorts[1]);
     
     private final WPI_TalonSRX m_intakeOuter = new WPI_TalonSRX(IntakeConstants.kIntakeTalonOuterPort);
     
-    private final WPI_TalonSRX m_intakeLeft = new WPI_TalonSRX(IntakeConstants.kIntakeTalonLeftPort);
-    private final WPI_TalonSRX m_intakeRight = new WPI_TalonSRX(IntakeConstants.kIntakeTalonRightPort);
+    private final WPI_TalonSRX m_intakeLeft = new WPI_TalonSRX(IntakeConstants.kIntakeTalonFrontPort);
+    private final WPI_TalonSRX m_intakeRight = new WPI_TalonSRX(IntakeConstants.kIntakeTalonBackPort);
     
     private final WPI_TalonSRX m_magazineLeft = new WPI_TalonSRX(IntakeConstants.kMagazineTalonLeftPort);
     private final WPI_TalonSRX m_magazineRight = new WPI_TalonSRX(IntakeConstants.kMagazineTalonRightPort);

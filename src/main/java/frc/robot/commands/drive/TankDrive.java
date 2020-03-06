@@ -7,30 +7,31 @@
 
 package frc.robot.commands.drive;
 
-import edu.wpi.first.wpilibj.Joystick;
+import java.util.function.DoubleSupplier;
+
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 import frc.robot.subsystems.DriveSubsystem;
 
 /**
- * A command that releases the hatch.
+ * Drives the robot with l (left wheels) and r (right wheels) values.
  */
 public class TankDrive extends CommandBase {
     private DriveSubsystem m_drive;
 
-    private Joystick m_leftJoystick;
-    private Joystick m_rightJoystick;
+    private DoubleSupplier l;
+    private DoubleSupplier r;
 
-    public TankDrive(DriveSubsystem subsystem, Joystick m_leftJoystick, Joystick m_rightJoystick) {
+    public TankDrive(DriveSubsystem subsystem, DoubleSupplier lSupplier, DoubleSupplier rSupplier) {
         m_drive = subsystem;
         addRequirements(subsystem);
 
-        this.m_leftJoystick = m_leftJoystick;
-        this.m_rightJoystick = m_rightJoystick;
+        l = lSupplier;
+        r = rSupplier;
     }
 
     @Override
     public void execute() {
-        m_drive.tankDrive(m_leftJoystick.getY(), m_rightJoystick.getY());
+        m_drive.tankDrive(l.getAsDouble(), r.getAsDouble());
     }
 }

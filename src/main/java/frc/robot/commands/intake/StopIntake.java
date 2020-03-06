@@ -12,10 +12,10 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.subsystems.IntakeSubsystem;
 
 /**
- * A command that releases the hatch.
+ * Stops the outer intake wheels
  */
 public class StopIntake extends InstantCommand {
-  public StopIntake(IntakeSubsystem subsystem) {
-    super(subsystem::stopIntake, subsystem);
-  }
+    public StopIntake(IntakeSubsystem subsystem) {
+        super(subsystem::stopIntake, subsystem);
+    }
 }

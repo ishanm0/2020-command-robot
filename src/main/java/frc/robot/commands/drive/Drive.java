@@ -7,12 +7,14 @@
 
 package frc.robot.commands.drive;
 
-import frc.robot.subsystems.DriveSubsystem;
 import edu.wpi.first.wpilibj.Joystick;
+
 import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 
+import frc.robot.subsystems.DriveSubsystem;
+
 /**
- * An example command that uses an example subsystem.
+ * Runs tank drive or arcade drive depending on boolean input value
  */
 public class Drive extends ConditionalCommand {
     @SuppressWarnings({ "PMD.UnusedPrivateField", "PMD.SingularField" })
@@ -23,7 +25,7 @@ public class Drive extends ConditionalCommand {
      * @param drive The subsystem used by this command.
      */
     public Drive(DriveSubsystem drive, Joystick m_leftJoystick, Joystick m_rightJoystick) {
-        super(new TankDrive(drive, m_leftJoystick, m_rightJoystick),
-                new ArcadeDrive(drive, m_leftJoystick, m_rightJoystick), drive::getTank);
+        super(new TankDrive(drive, m_leftJoystick::getY, m_rightJoystick::getY),
+                new ArcadeDrive(drive, m_leftJoystick::getY, m_rightJoystick::getX), drive::getTank);
     }
 }

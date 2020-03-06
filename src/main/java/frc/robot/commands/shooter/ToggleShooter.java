@@ -5,17 +5,19 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands.intake;
+package frc.robot.commands.shooter;
 
-import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.ConditionalCommand;
 
-import frc.robot.subsystems.IntakeSubsystem;
+import frc.robot.subsystems.ShooterSubsystem;
 
 /**
- * Stops the magazine wheels
+ * Switches shooting modes from close to far and vice versa depending on
+ * existing mode value
  */
-public class StopMagazine extends InstantCommand {
-    public StopMagazine(IntakeSubsystem subsystem) {
-        super(subsystem::stopMagazine, subsystem);
+public class ToggleShooter extends ConditionalCommand {
+    public ToggleShooter(ShooterSubsystem subsystem) {
+        super(new RetractShooter(subsystem), new ExtendShooter(subsystem), subsystem::getExtended);
+        subsystem.toggleExtended();
     }
 }

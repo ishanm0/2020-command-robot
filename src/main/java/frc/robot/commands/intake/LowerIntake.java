@@ -12,10 +12,10 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.subsystems.IntakeSubsystem;
 
 /**
- * A command that releases the hatch.
+ * Lowers the intake arm
  */
 public class LowerIntake extends InstantCommand {
-  public LowerIntake(IntakeSubsystem subsystem) {
-    super(subsystem::lowerIntake, subsystem);
-  }
+    public LowerIntake(IntakeSubsystem subsystem) {
+        super(subsystem::lowerIntake, subsystem);
+    }
 }

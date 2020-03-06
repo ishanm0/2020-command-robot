@@ -15,6 +15,9 @@ import edu.wpi.first.wpilibj2.command.PrintCommand;
 import frc.robot.Constants.TrenchConstants;
 import frc.robot.subsystems.TrenchSubsystem;
 
+/**
+ * Control Panel/Trench Position control
+ */
 public class Position extends CommandBase {
     private TrenchSubsystem m_trench;
 

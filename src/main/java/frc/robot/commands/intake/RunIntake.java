@@ -12,10 +12,10 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.subsystems.IntakeSubsystem;
 
 /**
- * A command that releases the hatch.
+ * Runs the outer intake wheels
  */
 public class RunIntake extends InstantCommand {
-  public RunIntake(IntakeSubsystem subsystem) {
-    super(subsystem::runIntake, subsystem);
-  }
+    public RunIntake(IntakeSubsystem subsystem) {
+        super(subsystem::runIntake, subsystem);
+    }
 }

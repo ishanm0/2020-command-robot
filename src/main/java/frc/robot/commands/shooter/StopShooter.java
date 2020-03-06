@@ -5,17 +5,17 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands.intake;
+package frc.robot.commands.shooter;
 
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 
-import frc.robot.subsystems.IntakeSubsystem;
+import frc.robot.subsystems.ShooterSubsystem;
 
 /**
- * Stops the magazine wheels
+ * Stops the shooter wheel (sets velocity to 0)
  */
-public class StopMagazine extends InstantCommand {
-    public StopMagazine(IntakeSubsystem subsystem) {
-        super(subsystem::stopMagazine, subsystem);
+public class StopShooter extends InstantCommand {
+    public StopShooter(ShooterSubsystem subsystem) {
+        super(subsystem::stopShooter, subsystem);
     }
 }

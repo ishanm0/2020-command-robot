@@ -12,8 +12,8 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.subsystems.IntakeSubsystem;
 
 /**
- * A complex auto command that drives forward, releases a hatch, and then drives
- * backward.
+ * Runs the ending intake sequence: stops the outer intake wheels, stops the
+ * magazine, and raises the intake arm
  */
 public class FinishIntake extends SequentialCommandGroup {
     /**
@@ -23,13 +23,13 @@ public class FinishIntake extends SequentialCommandGroup {
      */
     public FinishIntake(IntakeSubsystem intake) {
         addCommands(
-            // Pick up balls
-            new StopIntake(intake),
-            
-            // Begin spinning the magazine wheels
-            new StopMagazine(intake),
-            
-            // Lower the intake arm
-            new RaiseIntake(intake));
+                // Pick up balls
+                new StopIntake(intake),
+
+                // Begin spinning the magazine wheels
+                new StopMagazine(intake),
+
+                // Lower the intake arm
+                new RaiseIntake(intake));
     }
 }

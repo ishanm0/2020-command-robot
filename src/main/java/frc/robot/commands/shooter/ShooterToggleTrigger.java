@@ -5,17 +5,19 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands.intake;
+package frc.robot.commands.shooter;
 
-import edu.wpi.first.wpilibj2.command.InstantCommand;
+import edu.wpi.first.wpilibj2.command.button.Trigger;
 
-import frc.robot.subsystems.IntakeSubsystem;
+import frc.robot.Constants.OIConstants;
 
 /**
- * Stops the magazine wheels
+ * Trigger to switch shooting modes - DPad down
  */
-public class StopMagazine extends InstantCommand {
-    public StopMagazine(IntakeSubsystem subsystem) {
-        super(subsystem::stopMagazine, subsystem);
+public class ShooterToggleTrigger extends Trigger {
+    @Override
+    public boolean get() {
+        return OIConstants.joysticks[OIConstants.kShooterToggle[0]].getPOV(0) <= OIConstants.kShooterToggle[2]
+                && OIConstants.joysticks[OIConstants.kShooterToggle[0]].getPOV(0) >= OIConstants.kShooterToggle[1];
     }
 }

@@ -7,30 +7,31 @@
 
 package frc.robot.commands.drive;
 
-import edu.wpi.first.wpilibj.Joystick;
+import java.util.function.DoubleSupplier;
+
 import edu.wpi.first.wpilibj2.command.CommandBase;
 
 import frc.robot.subsystems.DriveSubsystem;
 
 /**
- * A command that releases the hatch.
+ * Drives the robot with y (linear) and z (rotation) values.
  */
 public class ArcadeDrive extends CommandBase {
     private DriveSubsystem m_drive;
 
-    private Joystick m_leftJoystick;
-    private Joystick m_rightJoystick;
+    private DoubleSupplier y;
+    private DoubleSupplier z;
 
-    public ArcadeDrive(DriveSubsystem subsystem, Joystick m_leftJoystick, Joystick m_rightJoystick) {
+    public ArcadeDrive(DriveSubsystem subsystem, DoubleSupplier ySupplier, DoubleSupplier zSupplier) {
         m_drive = subsystem;
         addRequirements(subsystem);
 
-        this.m_leftJoystick = m_leftJoystick;
-        this.m_rightJoystick = m_rightJoystick;
+        y = ySupplier;
+        z = zSupplier;
     }
 
     @Override
     public void execute() {
-        m_drive.arcadeDrive(m_leftJoystick.getY(), m_rightJoystick.getX());
+        m_drive.arcadeDrive(y.getAsDouble(), z.getAsDouble());
     }
 }

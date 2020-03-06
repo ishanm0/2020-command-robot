@@ -25,6 +25,9 @@ import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import frc.robot.Constants.*;
 
+/**
+ * Drive Subsystem, contains objects and methods needed to drive the robot
+ */
 public class DriveSubsystem extends SubsystemBase {
     private final WPI_TalonSRX m_leftTalon1 = new WPI_TalonSRX(DriveConstants.kLeftTalon1Port);
     private final WPI_TalonSRX m_leftTalon2 = new WPI_TalonSRX(DriveConstants.kLeftTalon2Port);
@@ -40,7 +43,7 @@ public class DriveSubsystem extends SubsystemBase {
 
     private final DifferentialDrive m_drive = new DifferentialDrive(m_leftDrive, m_rightDrive);
 
-    private final ADIS16470_IMU m_imu = new ADIS16470_IMU();
+    private final ADIS16470_IMU kIMU = DriveConstants.kIMU;
 
     private double insanityFactor = 0.5;
     // private double oldThrottle = 0;
@@ -111,7 +114,7 @@ public class DriveSubsystem extends SubsystemBase {
      * Zeroes the heading of the robot.
      */
     public void zeroHeading() {
-        m_imu.reset();
+        kIMU.reset();
     }
 
     /**
@@ -120,7 +123,7 @@ public class DriveSubsystem extends SubsystemBase {
      * @return the robot's heading in degrees, from 180 to 180
      */
     public double getHeading() {
-        return Math.IEEEremainder(m_imu.getAngle(), 360) * (DriveConstants.kGyroReversed ? -1.0 : 1.0);
+        return Math.IEEEremainder(kIMU.getAngle(), 360) * (DriveConstants.kGyroReversed ? -1.0 : 1.0);
     }
 
     /**
@@ -129,6 +132,6 @@ public class DriveSubsystem extends SubsystemBase {
      * @return The turn rate of the robot, in degrees per second
      */
     public double getTurnRate() {
-        return m_imu.getRate() * (DriveConstants.kGyroReversed ? -1.0 : 1.0);
+        return kIMU.getRate() * (DriveConstants.kGyroReversed ? -1.0 : 1.0);
     }
 }

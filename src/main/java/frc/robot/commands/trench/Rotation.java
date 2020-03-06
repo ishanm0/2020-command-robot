@@ -20,6 +20,10 @@ import frc.robot.Constants;
 import frc.robot.Constants.TrenchConstants;
 import frc.robot.subsystems.TrenchSubsystem;
 
+
+/**
+ * Control Panel/Trench Rotation control (PID on talon)
+ */
 public class Rotation extends CommandBase {
     private TrenchSubsystem m_trench;
 
@@ -32,7 +36,7 @@ public class Rotation extends CommandBase {
     private double confidenceThreshold = TrenchConstants.kConfidenceThreshold;
     private int maxRotations = TrenchConstants.kMaxRotations;
 
-    private double rotationSpeed = TrenchConstants.kRotationSpeed;
+    // private double rotationSpeed = TrenchConstants.kRotationSpeed;
 
     private ColorMatch colorMatcher;
     private ColorSensorV3 colorSensor;

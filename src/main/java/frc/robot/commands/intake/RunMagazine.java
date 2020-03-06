@@ -12,10 +12,10 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.subsystems.IntakeSubsystem;
 
 /**
- * A command that releases the hatch.
+ * Runs the magazine wheels
  */
 public class RunMagazine extends InstantCommand {
-  public RunMagazine(IntakeSubsystem subsystem) {
-    super(subsystem::runMagazine, subsystem);
-  }
+    public RunMagazine(IntakeSubsystem subsystem) {
+        super(subsystem::runMagazine, subsystem);
+    }
 }

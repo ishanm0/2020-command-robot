@@ -5,17 +5,18 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands.intake;
+package frc.robot.commands.shooter;
 
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 
-import frc.robot.subsystems.IntakeSubsystem;
+import frc.robot.subsystems.ShooterSubsystem;
 
 /**
- * Stops the magazine wheels
+ * Immediately kills the feeder wheel - set percent output to 0, not just
+ * velocity
  */
-public class StopMagazine extends InstantCommand {
-    public StopMagazine(IntakeSubsystem subsystem) {
-        super(subsystem::stopMagazine, subsystem);
+public class KillFeeder extends InstantCommand {
+    public KillFeeder(ShooterSubsystem subsystem) {
+        super(subsystem::killFeeder, subsystem);
     }
 }

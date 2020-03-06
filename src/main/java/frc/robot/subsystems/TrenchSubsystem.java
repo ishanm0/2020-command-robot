@@ -7,6 +7,7 @@
 
 package frc.robot.subsystems;
 
+import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
 import com.revrobotics.ColorMatch;
@@ -16,9 +17,12 @@ import com.revrobotics.ColorSensorV3;
 import edu.wpi.first.wpilibj.I2C;
 import edu.wpi.first.wpilibj.util.Color;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
-
+import frc.robot.Constants;
 import frc.robot.Constants.TrenchConstants;
 
+/**
+ * Trench Subsystem, contains objects and methods needed to use and control the trench/control panel mechanism
+ */
 public class TrenchSubsystem extends SubsystemBase {
     private final WPI_TalonSRX m_trenchTalon = new WPI_TalonSRX(TrenchConstants.kTrenchTalonPort);
 
@@ -48,6 +52,19 @@ public class TrenchSubsystem extends SubsystemBase {
         colorMatcher.addColorMatch(kGreenTarget);
         colorMatcher.addColorMatch(kRedTarget);
         colorMatcher.addColorMatch(kYellowTarget);
+
+        /* Factory Default all hardware to prevent unexpected behaviour */
+        m_trenchTalon.configFactoryDefault();
+
+        /* Config sensor used for Primary PID [Velocity] */
+        m_trenchTalon.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, TrenchConstants.kPIDLoopIdx,
+                Constants.kTimeoutMs);
+
+        /**
+         * Phase sensor accordingly. Positive Sensor Reading should match Green
+         * (blinking) Leds on Talon
+         */
+        m_trenchTalon.setSensorPhase(TrenchConstants.kSensorPhase);
     }
 
     public ColorMatch getColorMatcher() {
@@ -60,6 +77,10 @@ public class TrenchSubsystem extends SubsystemBase {
 
     public WPI_TalonSRX getTrenchTalon() {
         return m_trenchTalon;
+    }
+
+    public double getTrenchTalonRate() {
+        return m_trenchTalon.getSelectedSensorVelocity();
     }
 
     public int getColor() {
