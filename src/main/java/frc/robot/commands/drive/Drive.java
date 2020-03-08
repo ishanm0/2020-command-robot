@@ -17,8 +17,6 @@ import frc.robot.subsystems.DriveSubsystem;
  * Runs tank drive or arcade drive depending on boolean input value
  */
 public class Drive extends ConditionalCommand {
-    @SuppressWarnings({ "PMD.UnusedPrivateField", "PMD.SingularField" })
-
     /**
      * Creates a new Drive command.
      *
@@ -27,5 +25,10 @@ public class Drive extends ConditionalCommand {
     public Drive(DriveSubsystem drive, Joystick m_leftJoystick, Joystick m_rightJoystick) {
         super(new TankDrive(drive, m_leftJoystick::getY, m_rightJoystick::getY),
                 new ArcadeDrive(drive, m_leftJoystick::getY, m_rightJoystick::getX), drive::getTank);
+    }
+
+    @Override
+    public boolean isFinished() {
+        return false;
     }
 }

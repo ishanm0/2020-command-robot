@@ -55,12 +55,12 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 public class RobotContainer {
     // The robot's subsystems and commands are defined here...
     private final DriveSubsystem m_drive = new DriveSubsystem();
-    private final IntakeSubsystem m_intake = new IntakeSubsystem();
-    private final ShooterSubsystem m_shooter = new ShooterSubsystem();
+    // private final IntakeSubsystem m_intake = new IntakeSubsystem();
+    // private final ShooterSubsystem m_shooter = new ShooterSubsystem();
     // private final TrenchSubsystem m_trench = new TrenchSubsystem();
 
     // The default driving command
-    private final Drive m_driveCommand = new Drive(m_drive, OIConstants.joysticks[0], OIConstants.joysticks[1]);
+    public final Drive m_driveCommand = new Drive(m_drive, OIConstants.joysticks[0], OIConstants.joysticks[1]);
 
     private AutoShooter m_shooterCommand;
 
@@ -83,11 +83,11 @@ public class RobotContainer {
      * passing it to a {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
      */
     private void configureButtonBindings() {
-        new JoystickButton(OIConstants.joysticks[OIConstants.kIntakeControl[0]], OIConstants.kIntakeControl[1])
+        /* new JoystickButton(OIConstants.joysticks[OIConstants.kIntakeControl[0]], OIConstants.kIntakeControl[1])
                 .whenPressed(() -> new StartIntake(m_intake))
-                .whenReleased(() -> new FinishIntake(m_intake));
+                .whenReleased(() -> new FinishIntake(m_intake)); */
 
-        new JoystickButton(OIConstants.joysticks[OIConstants.kAutoShooterControl[0]],
+        /* new JoystickButton(OIConstants.joysticks[OIConstants.kAutoShooterControl[0]],
                 OIConstants.kAutoShooterControl[1])
                 .whenPressed(m_shooterCommand = new AutoShooter(m_shooter, m_drive))
                 .whenReleased(() -> m_shooterCommand.end(false));
@@ -118,7 +118,7 @@ public class RobotContainer {
                 .whenActive(() -> new KillFeeder(m_shooter));
 
         new DPadLeft(OIConstants.kStopFeederStick)
-                .whenActive(() -> new StopFeeder(m_shooter));
+                .whenActive(() -> new StopFeeder(m_shooter)); */
         
         /*
          * new JoystickButton(joysticks[OIConstants.kRotation[0]],
