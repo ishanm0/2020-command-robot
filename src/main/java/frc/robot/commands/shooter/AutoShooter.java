@@ -19,7 +19,7 @@ import edu.wpi.first.wpilibj2.command.StartEndCommand;
 
 import frc.robot.Constants.DriveConstants;
 import frc.robot.Constants.OIConstants;
-import frc.robot.Constants.ShooterConstants.Shooter;
+import frc.robot.Constants.ShooterConstants;
 
 import frc.robot.commands.drive.ArcadeDrive;
 
@@ -83,11 +83,11 @@ public class AutoShooter extends StartEndCommand {
     }
 
     public double xShift() {
-        return xPixelShift / Shooter.kPixelWidth;
+        return xPixelShift / ShooterConstants.kPixelWidth;
     }
 
     public double yShift() {
-        return yPixelShift / Shooter.kPixelHeight;
+        return yPixelShift / ShooterConstants.kPixelHeight;
     }
 
     public double zero() {
@@ -114,8 +114,8 @@ public class AutoShooter extends StartEndCommand {
     @Override
     public boolean isFinished() {
         return (driverMoved(m_leftJoystick) || driverMoved(m_rightJoystick))
-                || (kIMU.getAccelInstantX() > DriveConstants.kAccelThreshold
-                        || kIMU.getAccelInstantY() > DriveConstants.kAccelThreshold
-                        || kIMU.getAccelInstantZ() > DriveConstants.kAccelThreshold);
+                || (kIMU.getAccelInstantX() > ShooterConstants.kAccelThreshold
+                        || kIMU.getAccelInstantY() > ShooterConstants.kAccelThreshold
+                        || kIMU.getAccelInstantZ() > ShooterConstants.kAccelThreshold);
     }
 }

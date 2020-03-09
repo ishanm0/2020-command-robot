@@ -29,9 +29,6 @@ import frc.robot.commands.shooter.ReverseFeeder;
 import frc.robot.commands.shooter.StopFeeder;
 import frc.robot.commands.shooter.KillFeeder;
 
-/* import frc.robot.commands.trench.Position;
-import frc.robot.commands.trench.Rotation; */
-
 import frc.robot.dpad.DPadDown;
 import frc.robot.dpad.DPadLeft;
 import frc.robot.dpad.DPadRight;
@@ -40,7 +37,6 @@ import frc.robot.dpad.DPadUp;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
-// import frc.robot.subsystems.TrenchSubsystem;
 
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
@@ -55,14 +51,11 @@ import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 public class RobotContainer {
     // The robot's subsystems and commands are defined here...
     private final DriveSubsystem m_drive = new DriveSubsystem();
-    // private final IntakeSubsystem m_intake = new IntakeSubsystem();
-    // private final ShooterSubsystem m_shooter = new ShooterSubsystem();
-    // private final TrenchSubsystem m_trench = new TrenchSubsystem();
+    private final IntakeSubsystem m_intake = new IntakeSubsystem();
+    private final ShooterSubsystem m_shooter = new ShooterSubsystem();
 
     // The default driving command
-    public final Drive m_driveCommand = new Drive(m_drive, OIConstants.joysticks[0], OIConstants.joysticks[1]);
-
-    private AutoShooter m_shooterCommand;
+    public final Drive m_driveCommand = new Drive(m_drive);
 
     /**
      * The container for the robot. Contains subsystems, OI devices, and commands.
@@ -83,14 +76,13 @@ public class RobotContainer {
      * passing it to a {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
      */
     private void configureButtonBindings() {
-        /* new JoystickButton(OIConstants.joysticks[OIConstants.kIntakeControl[0]], OIConstants.kIntakeControl[1])
+        new JoystickButton(OIConstants.joysticks[OIConstants.kIntakeControl[0]], OIConstants.kIntakeControl[1])
                 .whenPressed(() -> new StartIntake(m_intake))
-                .whenReleased(() -> new FinishIntake(m_intake)); */
+                .whenReleased(() -> new FinishIntake(m_intake));
 
-        /* new JoystickButton(OIConstants.joysticks[OIConstants.kAutoShooterControl[0]],
+        new JoystickButton(OIConstants.joysticks[OIConstants.kAutoShooterControl[0]],
                 OIConstants.kAutoShooterControl[1])
-                .whenPressed(m_shooterCommand = new AutoShooter(m_shooter, m_drive))
-                .whenReleased(() -> m_shooterCommand.end(false));
+                .whileHeld(new AutoShooter(m_shooter, m_drive));
 
         new JoystickButton(OIConstants.joysticks[OIConstants.kManualShooterControl[0]], OIConstants.kManualShooterControl[1])
                 .whenPressed(() -> new StartShooter(m_shooter))
@@ -118,15 +110,7 @@ public class RobotContainer {
                 .whenActive(() -> new KillFeeder(m_shooter));
 
         new DPadLeft(OIConstants.kStopFeederStick)
-                .whenActive(() -> new StopFeeder(m_shooter)); */
-        
-        /*
-         * new JoystickButton(joysticks[OIConstants.kRotation[0]],
-         * OIConstants.kRotation[1]) .whenPressed(() -> new Rotation(m_trench));
-         * 
-         * new JoystickButton(joysticks[OIConstants.kPosition[0]],
-         * OIConstants.kPosition[1]) .whenPressed(() -> new Position(m_trench));
-         */
+                .whenActive(() -> new StopFeeder(m_shooter));
     }
 
     /**

@@ -10,23 +10,21 @@ package frc.robot.subsystems;
 import java.util.Map;
 
 import com.analog.adis16470.frc.ADIS16470_IMU;
-import com.ctre.phoenix.motorcontrol.ControlMode;
+
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
-import com.ctre.phoenix.motorcontrol.FollowerType;
-import com.ctre.phoenix.motorcontrol.InvertType;
-import com.ctre.phoenix.motorcontrol.TalonSRXControlMode;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
-import edu.wpi.first.wpilibj.controller.PIDController;
 import edu.wpi.first.wpilibj.SpeedControllerGroup;
 import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 
 import edu.wpi.first.networktables.NetworkTableEntry;
+
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
 import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
 import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
-import edu.wpi.first.wpilibj.smartdashboard.SmartDashboard;
+
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
+
 import frc.robot.Constants;
 import frc.robot.Constants.*;
 
@@ -52,20 +50,24 @@ public class DriveSubsystem extends SubsystemBase {
 
     private double insanityFactor = 0.5;
 
-    public static boolean tank = true;
+    public static boolean tank = DriveConstants.kTankDefault;
 
     private ShuffleboardTab tab = Shuffleboard.getTab("SmartDashboard");
     private NetworkTableEntry insanityFactorEntry = tab.add("insanityFactor", insanityFactor)
-            .withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min", 0, "max", 1)).getEntry();
-    private NetworkTableEntry driveToggleEntry = tab.add("driveToggle", tank).withWidget("Toggle Button").getEntry();
-
-    private NetworkTableEntry joy1Entry = tab.add("joy1", 0).getEntry();
-    private NetworkTableEntry joy2Entry = tab.add("joy2", 0).getEntry();
+            .withWidget(BuiltInWidgets.kNumberSlider)
+            .withProperties(Map.of("min", 0, "max", 1))
+            .getEntry();
+    private NetworkTableEntry driveToggleEntry = tab.add("driveToggle", tank)
+            .withWidget(BuiltInWidgets.kToggleButton)
+            .getEntry();
+    private NetworkTableEntry lSpeedEntry = tab.add("lSpeed", 0).getEntry();
+    private NetworkTableEntry rSpeedEntry = tab.add("rSpeed", 0).getEntry();
+    
+    private NetworkTableEntry ySpeedEntry = tab.add("ySpeed", 0).getEntry();
+    private NetworkTableEntry zSpeedEntry = tab.add("zSpeed", 0).getEntry();
     
     private NetworkTableEntry leftEncoderEntry = tab.add("leftEncoder", 0).getEntry();
     private NetworkTableEntry rightEncoderEntry = tab.add("rightEncoder", 0).getEntry();
-
-    private PIDController pidController = new PIDController(0, 0, 0);
 
     public DriveSubsystem() {
         m_leftTalon1.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, DriveConstants.kPIDLoopIdx, Constants.kTimeoutMs);
@@ -75,57 +77,6 @@ public class DriveSubsystem extends SubsystemBase {
 
         tab.add("m_leftTalon1", m_leftTalon1);
         tab.add("m_rightTalon1", m_rightTalon1);
-
-        tab.add("leftPID", pidController);
-
-        m_leftTalon1.setInverted(DriveConstants.kLeftInverted);
-        // /**
-        //  * Phase sensor accordingly. Positive Sensor Reading should match Green
-        //  * (blinking) Leds on Talon
-        //  */
-        // m_leftTalon1.setSensorPhase(DriveConstants.kSensorPhase);
-
-        // /* Config the peak and nominal outputs */
-        // m_leftTalon1.configNominalOutputForward(0, Constants.kTimeoutMs);
-        // m_leftTalon1.configNominalOutputReverse(0, Constants.kTimeoutMs);
-        // m_leftTalon1.configPeakOutputForward(1, Constants.kTimeoutMs);
-        // m_leftTalon1.configPeakOutputReverse(-1, Constants.kTimeoutMs);
-
-        // /* Config the Velocity closed loop gains in slot0 */
-		// m_leftTalon1.config_kF(DriveConstants.kPIDLoopIdx, DriveConstants.kF, Constants.kTimeoutMs);
-		// m_leftTalon1.config_kP(DriveConstants.kPIDLoopIdx, DriveConstants.kP, Constants.kTimeoutMs);
-		// m_leftTalon1.config_kI(DriveConstants.kPIDLoopIdx, DriveConstants.kI, Constants.kTimeoutMs);
-        // m_leftTalon1.config_kD(DriveConstants.kPIDLoopIdx, DriveConstants.kD, Constants.kTimeoutMs);
-        
-        // m_leftTalon2.follow(m_leftTalon1, FollowerType.AuxOutput1);
-        // m_leftTalon3.follow(m_leftTalon1, FollowerType.AuxOutput1);
-        
-        m_rightTalon1.setInverted(DriveConstants.kRightInverted);
-        /**
-         * Phase sensor accordingly. Positive Sensor Reading should match Green
-         * (blinking) Leds on Talon
-         */
-        m_rightTalon1.setSensorPhase(DriveConstants.kSensorPhase);
-
-        /* Config the peak and nominal outputs */
-        m_rightTalon1.configNominalOutputForward(0, Constants.kTimeoutMs);
-        m_rightTalon1.configNominalOutputReverse(0, Constants.kTimeoutMs);
-        m_rightTalon1.configPeakOutputForward(1, Constants.kTimeoutMs);
-        m_rightTalon1.configPeakOutputReverse(-1, Constants.kTimeoutMs);
-
-        /* Config the Velocity closed loop gains in slot0 */
-		m_rightTalon1.config_kF(DriveConstants.kPIDLoopIdx, DriveConstants.kF, Constants.kTimeoutMs);
-		m_rightTalon1.config_kP(DriveConstants.kPIDLoopIdx, DriveConstants.kP, Constants.kTimeoutMs);
-		m_rightTalon1.config_kI(DriveConstants.kPIDLoopIdx, DriveConstants.kI, Constants.kTimeoutMs);
-        m_rightTalon1.config_kD(DriveConstants.kPIDLoopIdx, DriveConstants.kD, Constants.kTimeoutMs);
-        
-        m_rightTalon2.follow(m_rightTalon1, FollowerType.PercentOutput);
-        m_rightTalon3.follow(m_rightTalon1, FollowerType.PercentOutput);
-
-        SmartDashboard.putNumber("P", 0);
-        SmartDashboard.putNumber("I", 0);
-        SmartDashboard.putNumber("D", 0);
-        SmartDashboard.putNumber("F", 0);
     }
 
     @Override
@@ -135,31 +86,16 @@ public class DriveSubsystem extends SubsystemBase {
 
         leftEncoderEntry.forceSetNumber(m_leftTalon1.getSelectedSensorVelocity());
         rightEncoderEntry.forceSetNumber(m_rightTalon1.getSelectedSensorVelocity());
-        // m_leftTalon1.set(ControlMode.PercentOutput, pidController.calculate(m_leftTalon1.getSelectedSensorVelocity(), DriveConstants.kVelocity));
-
-        m_rightTalon1.config_kF(DriveConstants.kPIDLoopIdx, SmartDashboard.getNumber("F", 0), Constants.kTimeoutMs);
-		m_rightTalon1.config_kP(DriveConstants.kPIDLoopIdx, SmartDashboard.getNumber("P", 0), Constants.kTimeoutMs);
-		m_rightTalon1.config_kI(DriveConstants.kPIDLoopIdx, SmartDashboard.getNumber("I", 0), Constants.kTimeoutMs);
-        m_rightTalon1.config_kD(DriveConstants.kPIDLoopIdx, SmartDashboard.getNumber("D", 0), Constants.kTimeoutMs);
-
-        m_rightTalon1.set(ControlMode.Velocity, 3400);
-        SmartDashboard.putData(pidController);
     }
-
+    
     /**
      * Drives the robot at given left/right speeds. Speeds range from [-1, 1].
      * 
-     * @param leftSpeed  speed for left wheels
+     * @param leftSpeed speed for left wheels
      * @param rightSpeed speed for right wheels
      */
     public void tankDrive(double leftSpeed, double rightSpeed) {
-        // m_drive.tankDrive(-1 * insanityFactor * leftSpeed, -1 * insanityFactor * rightSpeed, false);
-        // m_leftTalon1.set(TalonSRXControlMode.Velocity, -1 * insanityFactor * DriveConstants.kMaxRPM);
-
-        // m_rightTalon1.set(TalonSRXControlMode.Velocity, -1 * insanityFactor * DriveConstants.kMaxRPM);
-
-        joy1Entry.forceSetNumber(leftSpeed);
-        joy2Entry.forceSetNumber(rightSpeed);
+        m_drive.tankDrive(-1 * insanityFactor * leftSpeed, -1 * insanityFactor * rightSpeed, false);
     }
 
     /**
@@ -169,9 +105,28 @@ public class DriveSubsystem extends SubsystemBase {
      * @param zSpeed rotational speed
      */
     public void arcadeDrive(double ySpeed, double zSpeed) {
-        insanityFactor = insanityFactorEntry.getDouble(insanityFactor);
-
         m_drive.arcadeDrive(insanityFactor * ySpeed, insanityFactor * zSpeed, false);
+    }
+
+    /**
+     * Alternately uses tank drive or arcade drive depending on dashboard value.
+     * 
+     * @param lSpeed tank drive left speed
+     * @param rSpeed tank drive right speed
+     * @param ySpeed arcade drive linear speed
+     * @param zSpeed arcade drive rotation speed
+     */
+    public void drive(double lSpeed, double rSpeed, double ySpeed, double zSpeed) {
+        if (getTank()) {
+            tankDrive(lSpeed, rSpeed);
+        } else {
+            arcadeDrive(ySpeed, zSpeed);
+        }
+
+        lSpeedEntry.forceSetDouble(lSpeed);
+        rSpeedEntry.forceSetDouble(rSpeed);
+        ySpeedEntry.forceSetDouble(ySpeed);
+        zSpeedEntry.forceSetDouble(zSpeed);
     }
 
     /**
@@ -180,7 +135,7 @@ public class DriveSubsystem extends SubsystemBase {
     public boolean getTank() {
         return tank;
     }
-
+    
     /**
      * Zeroes the heading of the robot.
      */

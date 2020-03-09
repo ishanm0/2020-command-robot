@@ -43,36 +43,12 @@ public final class Constants {
 
         public static final ADIS16470_IMU kIMU = new ADIS16470_IMU();
 
-        public static final double kAccelThreshold = 0.05;
-
-        public static final int kMaxRPM = 3600;
-
         public static final boolean kLeftInverted = false;
         public static final boolean kRightInverted = false;
 
-        /**
-         * Which PID slot to pull gains from. Starting 2018, you can choose from 0,1,2
-         * or 3. Only the first two (0,1) are visible in web-based configuration.
-         */
-        public static final int kSlotIdx = 0;
-
-        /**
-         * Talon SRX/ Victor SPX will supported multiple (cascaded) PID loops. For now
-         * we just want the primary one.
-         */
         public static final int kPIDLoopIdx = 0;
 
-        // public final static double kVelocity = kMaxRPM * 4096 / 600;
-        public final static double kVelocity = 3600;
-
-        public final static double kP = 0;
-        public final static double kI = 0;
-        public final static double kD = 0;
-        public final static double kF = 1023.0 / 7200.0;
-        public final static int kIz = 300;
-        public final static double kPeakOut = 1.00;
-
-        public final static boolean kSensorPhase = true;
+        public static final boolean kTankDefault = false;
     }
 
     public static final class OIConstants {
@@ -124,52 +100,28 @@ public final class Constants {
     public static final class ShooterConstants {
         public static final class Feeder {
             public static final int kFeederTalonPort = 12;
-            /**
-             * Which PID slot to pull gains from. Starting 2018, you can choose from 0,1,2
-             * or 3. Only the first two (0,1) are visible in web-based configuration.
-             */
-            public static final int kSlotIdx = 0;
 
-            /**
-             * Talon SRX/ Victor SPX will supported multiple (cascaded) PID loops. For now
-             * we just want the primary one.
-             */
+            public static final double kSpeed = 0.75;
+            
             public static final int kPIDLoopIdx = 0;
 
-            public final static double kRPM = 500.0;
-
-            public final static double kVelocity = kRPM * 4096 / 600;
-
-            public final static double kP = 0.25;
-            public final static double kI = 0.001;
-            public final static double kD = 20.0;
-            public final static double kF = 1023.0 / 7200.0;
-            public final static int kIz = 300;
-            public final static double kPeakOut = 1.00;
-
-            public final static boolean kSensorPhase = true;
+            public static final boolean kSensorPhase = true;
         }
 
         public static final class Shooter {
             public static final int kShooterLeftPort = 13;
             public static final int kShooterRightPort = 14;
 
-            public final static double kRPM = 500.0;
-
-            public final static double kP = 0.25;
-            public final static double kI = 0.001;
-            public final static double kD = 20.0;
-            public final static double kF = 1023.0 / 7200.0;
-            public final static int kIz = 300;
-            public final static double kPeakOut = 1.00;
-
-            public final static double kMaxTurnSpeed = 0.5;
-
-            public final static int kPixelWidth = 160;
-            public final static int kPixelHeight = 120;
-
+            public static final double kSpeed = 0.75;
         }
+        
+        public final static double kMaxTurnSpeed = 0.5;
 
+        public final static int kPixelWidth = 160;
+        public final static int kPixelHeight = 120;
+
+        public static final double kAccelThreshold = 0.05;
+        
         public static final int[] kShooterSolenoidPorts = { 2, 3 };
     }
 
@@ -184,28 +136,7 @@ public final class Constants {
 
         public static final int kMaxRotations = 4;
 
-        /**
-         * Which PID slot to pull gains from. Starting 2018, you can choose from 0,1,2
-         * or 3. Only the first two (0,1) are visible in web-based configuration.
-         */
-        public static final int kSlotIdx = 0;
-
-        /**
-         * Talon SRX/ Victor SPX will supported multiple (cascaded) PID loops. For now
-         * we just want the primary one.
-         */
         public static final int kPIDLoopIdx = 0;
-
-        public final static double kRPM = 500.0;
-
-        public final static double kVelocity = kRPM * 4096 / 600;
-
-        public final static double kP = 0.25;
-        public final static double kI = 0.001;
-        public final static double kD = 20.0;
-        public final static double kF = 1023.0 / 7200.0;
-        public final static int kIz = 300;
-        public final static double kPeakOut = 1.00;
 
         public final static boolean kSensorPhase = true;
     }
