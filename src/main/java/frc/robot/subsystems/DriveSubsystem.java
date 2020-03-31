@@ -10,7 +10,7 @@ package frc.robot.subsystems;
 import java.util.Map;
 
 import com.analog.adis16470.frc.ADIS16470_IMU;
-
+import com.analog.adis16470.frc.ADIS16470_IMU.IMUAxis;
 import com.ctre.phoenix.motorcontrol.FeedbackDevice;
 import com.ctre.phoenix.motorcontrol.can.WPI_TalonSRX;
 
@@ -77,6 +77,8 @@ public class DriveSubsystem extends SubsystemBase {
 
         tab.add("m_leftTalon1", m_leftTalon1);
         tab.add("m_rightTalon1", m_rightTalon1);
+
+        kIMU.setYawAxis(IMUAxis.kZ);
     }
 
     @Override

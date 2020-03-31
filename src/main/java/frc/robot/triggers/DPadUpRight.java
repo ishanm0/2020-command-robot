@@ -5,7 +5,7 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.dpad;
+package frc.robot.triggers;
 
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 

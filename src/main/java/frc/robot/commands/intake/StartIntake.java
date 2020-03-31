@@ -29,7 +29,10 @@ public class StartIntake extends SequentialCommandGroup {
                 // Begin spinning the magazine wheels
                 new RunMagazine(intake),
 
-                // Pick up balls
-                new RunIntake(intake));
+                // Pick up balls (outer)
+                new RunIntakeOuter(intake),
+                
+                // Bring balls to magazine
+                new RunThroat(intake));
     }
 }

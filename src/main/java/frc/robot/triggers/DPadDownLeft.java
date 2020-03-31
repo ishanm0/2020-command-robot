@@ -5,25 +5,25 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.dpad;
+package frc.robot.triggers;
 
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 import frc.robot.Constants.OIConstants;
 
 /**
- * DPad Down Trigger
+ * DPad Down Left Trigger
  */
-public class DPadDown extends Trigger {
+public class DPadDownLeft extends Trigger {
     private int id;
 
-    public DPadDown(int joyID) {
+    public DPadDownLeft(int joyID) {
         id = joyID;
     }
 
     @Override
     public boolean get() {
-        return OIConstants.joysticks[id].getPOV(0) <= 202
-                && OIConstants.joysticks[id].getPOV(0) >= 157;
+        return OIConstants.joysticks[id].getPOV(0) <= 247
+                && OIConstants.joysticks[id].getPOV(0) >= 202;
     }
 }

@@ -95,6 +95,10 @@ public final class Constants {
         public static final double kIntakeFlatSpeed = 0.5;
 
         public static final double kMagazineSpeed = 0.5;
+
+        public static final int kTopSwitch = 0;
+        public static final int kMagSwitch = 1;
+        public static final int kBaseSwitch = 2;
     }
 
     public static final class ShooterConstants {

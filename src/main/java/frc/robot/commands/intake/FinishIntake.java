@@ -23,13 +23,16 @@ public class FinishIntake extends SequentialCommandGroup {
      */
     public FinishIntake(IntakeSubsystem intake) {
         addCommands(
-                // Pick up balls
-                new StopIntake(intake),
+                // Stop intake outer wheels
+                new StopIntakeOuter(intake),
 
-                // Begin spinning the magazine wheels
+                // Stop throat wheels
+                new StopThroat(intake),
+
+                // Stop spinning the magazine wheels
                 new StopMagazine(intake),
 
-                // Lower the intake arm
+                // Raise the intake arm
                 new RaiseIntake(intake));
     }
 }

@@ -57,25 +57,35 @@ public class IntakeSubsystem extends SubsystemBase {
     }
 
     /**
-     * Runs all three intake wheels at set speeds.
+     * Runs the two throat wheels at set speeds.
      */
-    public void runIntake() {
-        m_intakeOuter.set(IntakeConstants.kIntakeOuterSpeed);
-
+    public void runThroat() {
         m_intakeLeft.set(IntakeConstants.kIntakeFlatSpeed);
         m_intakeRight.set(IntakeConstants.kIntakeFlatSpeed);
     }
-    
-    /**
-     * Stops the intake wheels.
-     */
-    public void stopIntake() {
-        m_intakeOuter.set(0);
 
+    /**
+     * Runs the outer intake wheels at set speeds.
+     */
+    public void runIntakeOuter() {
+        m_intakeOuter.set(IntakeConstants.kIntakeOuterSpeed);
+    }
+
+    /**
+     * Stops the two throat wheels.
+     */
+    public void stopThroat() {
         m_intakeLeft.set(0);
         m_intakeRight.set(0);
     }
 
+    /**
+     * Runs the outer intake wheels
+     */
+    public void stopIntakeOuter() {
+        m_intakeOuter.set(0);
+    }
+    
     /**
      * Runs the magazine wheels at set speeds.
      */

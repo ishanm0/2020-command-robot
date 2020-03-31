@@ -7,13 +7,15 @@
 
 package frc.robot;
 
+import frc.robot.Constants.IntakeConstants;
 import frc.robot.Constants.OIConstants;
-
+import frc.robot.Constants.ShooterConstants;
 import frc.robot.commands.drive.Drive;
 
 import frc.robot.commands.intake.FinishIntake;
 import frc.robot.commands.intake.StartIntake;
-
+import frc.robot.commands.intake.StopMagazine;
+import frc.robot.commands.intake.StopThroat;
 import frc.robot.commands.shooter.AutoShooter;
 
 import frc.robot.commands.shooter.StartShooter;
@@ -29,11 +31,11 @@ import frc.robot.commands.shooter.ReverseFeeder;
 import frc.robot.commands.shooter.StopFeeder;
 import frc.robot.commands.shooter.KillFeeder;
 
-import frc.robot.dpad.DPadDown;
-import frc.robot.dpad.DPadLeft;
-import frc.robot.dpad.DPadRight;
-import frc.robot.dpad.DPadUp;
-
+import frc.robot.triggers.DPadDown;
+import frc.robot.triggers.DPadLeft;
+import frc.robot.triggers.DPadRight;
+import frc.robot.triggers.DPadUp;
+import frc.robot.triggers.LimitSwitch;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
@@ -111,6 +113,15 @@ public class RobotContainer {
 
         new DPadLeft(OIConstants.kStopFeederStick)
                 .whenActive(() -> new StopFeeder(m_shooter));
+
+        new LimitSwitch(IntakeConstants.kTopSwitch)
+                .whenActive(() -> new StopFeeder(m_shooter));
+
+        new LimitSwitch(IntakeConstants.kMagSwitch)
+                .whenActive(() -> new StopMagazine(m_intake));
+        
+        new LimitSwitch(IntakeConstants.kBaseSwitch)
+                .whenActive(() -> new StopThroat(m_intake));
     }
 
     /**

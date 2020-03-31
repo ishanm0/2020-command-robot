@@ -5,25 +5,17 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.dpad;
+package frc.robot.commands.intake;
 
-import edu.wpi.first.wpilibj2.command.button.Trigger;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 
-import frc.robot.Constants.OIConstants;
+import frc.robot.subsystems.IntakeSubsystem;
 
 /**
- * DPad Left Trigger
+ * Runs the outer intake wheels
  */
-public class DPadLeft extends Trigger {
-    private int id;
-
-    public DPadLeft(int joyID) {
-        id = joyID;
-    }
-
-    @Override
-    public boolean get() {
-        return OIConstants.joysticks[id].getPOV(0) <= 247
-                && OIConstants.joysticks[id].getPOV(0) >= 292;
+public class RunThroat extends InstantCommand {
+    public RunThroat(IntakeSubsystem subsystem) {
+        super(subsystem::runThroat, subsystem);
     }
 }
