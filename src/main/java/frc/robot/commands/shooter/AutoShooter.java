@@ -9,9 +9,7 @@ package frc.robot.commands.shooter;
 
 import com.analog.adis16470.frc.ADIS16470_IMU;
 
-import edu.wpi.first.networktables.NetworkTable;
 import edu.wpi.first.networktables.NetworkTableEntry;
-import edu.wpi.first.networktables.NetworkTableInstance;
 
 import edu.wpi.first.wpilibj.Joystick;
 
@@ -34,25 +32,12 @@ public class AutoShooter extends StartEndCommand {
     private final ShooterSubsystem m_shooter;
     private final DriveSubsystem m_drive;
 
-    /**
-     * Get the default instance of NetworkTables that was created automatically when
-     * your program starts
-     */
-    private final NetworkTableInstance inst = NetworkTableInstance.getDefault();
-
-    /*
-     * Get the table within that instance that contains the data. There can be as
-     * many tables as you like and exist to make it easier to organize your data. In
-     * this case, it's a table called datatable.
-     */
-    private final NetworkTable table = inst.getTable("SmartDashboard");
-
     /*
      * Get the entries within that table that correspond to the X and Y values for
      * some operation in your program.
      */
-    private NetworkTableEntry xEntry = table.getEntry("x");
-    private NetworkTableEntry yEntry = table.getEntry("Y");
+    private NetworkTableEntry xEntry = OIConstants.kTable.getEntry("x");
+    private NetworkTableEntry yEntry = OIConstants.kTable.getEntry("Y");
 
     private double xPixelShift = xEntry.getDouble(0);
     private double yPixelShift = yEntry.getDouble(0);
@@ -66,11 +51,13 @@ public class AutoShooter extends StartEndCommand {
      * Creates a new AutoShooter.
      *
      * @param shooter The shooter subsystem this command will run on
+     * @param drive The drive subsystem this command will use
      */
     public AutoShooter(ShooterSubsystem shooter, DriveSubsystem drive) {
         super(() -> new StartShooter(shooter), () -> new FinishShooter(shooter), shooter, drive);
         m_shooter = shooter;
         m_drive = drive;
+        addRequirements(m_shooter, m_drive);
     }
 
     @Override
@@ -82,16 +69,22 @@ public class AutoShooter extends StartEndCommand {
         }
     }
 
+    /**
+     * Turns the xShift value into a DoubleSupplier
+     * 
+     * @return xShift scaled
+     */
     public double xShift() {
-        return xPixelShift / ShooterConstants.kPixelWidth;
+        return (xPixelShift / ShooterConstants.kPixelWidth) * ShooterConstants.kXShiftFactor;
     }
 
+    /**
+     * Turns the yShift value into a DoubleSupplier
+     * 
+     * @return yShift scaled
+     */
     public double yShift() {
-        return yPixelShift / ShooterConstants.kPixelHeight;
-    }
-
-    public double zero() {
-        return 0;
+        return (yPixelShift / ShooterConstants.kPixelHeight) * ShooterConstants.kYShiftFactor;
     }
 
     @Override
@@ -100,17 +93,22 @@ public class AutoShooter extends StartEndCommand {
         yPixelShift = yEntry.getDouble(0);
 
         if (Math.abs(xShift()) > 0) {
-            new ArcadeDrive(m_drive, this::zero, this::xShift);
+            new ArcadeDrive(m_drive, () -> {return 0;}, this::xShift);
         } else if (Math.abs(yShift()) > 0) {
-            new ArcadeDrive(m_drive, this::yShift, this::zero);
+            new ArcadeDrive(m_drive, this::yShift, () -> {return 0;});
         }
     }
 
+    /**
+     * Checks if driver has moved the joystick given in the X, Y, or Z axes
+     * 
+     * @param m_joystick the joystick to check input from
+     * @return true if joystick is moved in any axis
+     */
     public boolean driverMoved(Joystick m_joystick) {
         return m_joystick.getX() != 0 || m_joystick.getY() != 0 || m_joystick.getZ() != 0;
     }
 
-    // Returns true when the command should end.
     @Override
     public boolean isFinished() {
         return (driverMoved(m_leftJoystick) || driverMoved(m_rightJoystick))

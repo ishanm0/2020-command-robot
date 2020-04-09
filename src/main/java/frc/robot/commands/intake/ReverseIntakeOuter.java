@@ -5,18 +5,17 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.commands.shooter;
+package frc.robot.commands.intake;
 
 import edu.wpi.first.wpilibj2.command.InstantCommand;
 
-import frc.robot.subsystems.ShooterSubsystem;
+import frc.robot.subsystems.IntakeSubsystem;
 
 /**
- * Immediately kills the feeder wheel - set percent output to 0, not just
- * velocity
+ * Runs the outer intake wheels in reverse
  */
-public class KillShooter extends InstantCommand {
-    public KillShooter(ShooterSubsystem subsystem) {
-        super(subsystem::killShooter, subsystem);
+public class ReverseIntakeOuter extends InstantCommand {
+    public ReverseIntakeOuter(IntakeSubsystem subsystem) {
+        super(subsystem::reverseIntakeOuter, subsystem);
     }
 }

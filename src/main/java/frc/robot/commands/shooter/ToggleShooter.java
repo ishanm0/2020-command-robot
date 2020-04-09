@@ -18,6 +18,7 @@ import frc.robot.subsystems.ShooterSubsystem;
 public class ToggleShooter extends ConditionalCommand {
     public ToggleShooter(ShooterSubsystem subsystem) {
         super(new RetractShooter(subsystem), new ExtendShooter(subsystem), subsystem::getExtended);
+        addRequirements(subsystem);
         subsystem.toggleExtended();
     }
 }

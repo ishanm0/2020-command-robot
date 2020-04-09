@@ -17,7 +17,7 @@ import frc.robot.subsystems.DriveSubsystem;
  * Drives the robot with l (left wheels) and r (right wheels) values.
  */
 public class TankDrive extends CommandBase {
-    private DriveSubsystem m_drive;
+    private final DriveSubsystem m_drive;
 
     private DoubleSupplier l;
     private DoubleSupplier r;

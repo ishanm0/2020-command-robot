@@ -5,25 +5,17 @@
 /* the project.                                                               */
 /*----------------------------------------------------------------------------*/
 
-package frc.robot.triggers;
+package frc.robot.commands.intake;
 
-import edu.wpi.first.wpilibj2.command.button.Trigger;
+import edu.wpi.first.wpilibj2.command.InstantCommand;
 
-import frc.robot.Constants.OIConstants;
+import frc.robot.subsystems.IntakeSubsystem;
 
 /**
- * DPad Up Trigger
+ * Runs the throat wheels in reverse
  */
-public class DPadUpRight extends Trigger {
-    private final int id;
-
-    public DPadUpRight(int joyID) {
-        id = joyID;
-    }
-
-    @Override
-    public boolean get() {
-        return OIConstants.joysticks[id].getPOV(0) <= 67
-                && OIConstants.joysticks[id].getPOV(0) >= 22;
+public class ReverseThroat extends InstantCommand {
+    public ReverseThroat(IntakeSubsystem subsystem) {
+        super(subsystem::reverseThroat, subsystem);
     }
 }

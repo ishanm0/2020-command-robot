@@ -22,6 +22,7 @@ public class FinishShooter extends SequentialCommandGroup {
      * @param shooter The shooter subsystem this command will run on
      */
     public FinishShooter(ShooterSubsystem shooter) {
+        addRequirements(shooter);
         addCommands(
                 // Stop running the feeder wheel
                 new StopFeeder(shooter),

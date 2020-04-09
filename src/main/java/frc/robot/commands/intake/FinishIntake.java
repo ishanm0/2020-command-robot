@@ -13,7 +13,7 @@ import frc.robot.subsystems.IntakeSubsystem;
 
 /**
  * Runs the ending intake sequence: stops the outer intake wheels, stops the
- * magazine, and raises the intake arm
+ * throat wheels, stops the magazine, and raises the intake arm
  */
 public class FinishIntake extends SequentialCommandGroup {
     /**
@@ -22,6 +22,7 @@ public class FinishIntake extends SequentialCommandGroup {
      * @param intake The intake subsystem this command will run on
      */
     public FinishIntake(IntakeSubsystem intake) {
+        addRequirements(intake);
         addCommands(
                 // Stop intake outer wheels
                 new StopIntakeOuter(intake),

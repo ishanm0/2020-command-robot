@@ -12,7 +12,7 @@ import edu.wpi.first.wpilibj.DigitalInput;
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 /**
- * DPad Down Trigger
+ * Limit Switch Trigger
  */
 public class LimitSwitch extends Trigger {
     DigitalInput limitSwitch;

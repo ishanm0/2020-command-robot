@@ -17,7 +17,7 @@ import frc.robot.subsystems.DriveSubsystem;
  * Drives the robot with y (linear) and z (rotation) values.
  */
 public class ArcadeDrive extends CommandBase {
-    private DriveSubsystem m_drive;
+    private final DriveSubsystem m_drive;
 
     private DoubleSupplier y;
     private DoubleSupplier z;

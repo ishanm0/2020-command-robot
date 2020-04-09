@@ -12,7 +12,7 @@ import edu.wpi.first.wpilibj2.command.InstantCommand;
 import frc.robot.subsystems.IntakeSubsystem;
 
 /**
- * Stops the outer intake wheels
+ * Stops the throat wheels
  */
 public class StopThroat extends InstantCommand {
     public StopThroat(IntakeSubsystem subsystem) {

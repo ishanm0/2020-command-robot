@@ -18,12 +18,11 @@ import com.revrobotics.CANSparkMaxLowLevel.MotorType;
 import edu.wpi.first.networktables.NetworkTableEntry;
 import edu.wpi.first.wpilibj.DoubleSolenoid;
 import edu.wpi.first.wpilibj.DoubleSolenoid.Value;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import frc.robot.Constants;
 import frc.robot.Constants.ShooterConstants.Shooter;
+import frc.robot.Constants.OIConstants;
 import frc.robot.Constants.ShooterConstants;
 import frc.robot.Constants.ShooterConstants.Feeder;
 
@@ -42,11 +41,10 @@ public class ShooterSubsystem extends SubsystemBase {
     private final DoubleSolenoid m_shooterSolenoid = new DoubleSolenoid(ShooterConstants.kShooterSolenoidPorts[0],
             ShooterConstants.kShooterSolenoidPorts[1]);
 
-    private static boolean extended = false;
+    private boolean extended = false;
 
-    private ShuffleboardTab tab = Shuffleboard.getTab("SmartDashboard");
-    private NetworkTableEntry leftEncoderEntry = tab.add("leftShooterEncoder", 0).getEntry();
-    private NetworkTableEntry rightEncoderEntry = tab.add("rightShooterEncoder", 0).getEntry();
+    private NetworkTableEntry leftEncoderEntry = OIConstants.kTab.add("leftShooterEncoder", 0).getEntry();
+    private NetworkTableEntry rightEncoderEntry = OIConstants.kTab.add("rightShooterEncoder", 0).getEntry();
 
     public ShooterSubsystem() {
         m_shooterLeft.restoreFactoryDefaults();
@@ -78,10 +76,6 @@ public class ShooterSubsystem extends SubsystemBase {
         m_shooterLeft.set(0);
     }
 
-    public void killShooter() {
-        m_shooterLeft.set(0);
-    }
-
     public void runFeeder() {
         m_feeder.set(TalonSRXControlMode.PercentOutput, Feeder.kSpeed);
     }
@@ -91,10 +85,6 @@ public class ShooterSubsystem extends SubsystemBase {
     }
 
     public void stopFeeder() {
-        m_feeder.set(TalonSRXControlMode.PercentOutput, 0);
-    }
-
-    public void killFeeder() {
         m_feeder.set(TalonSRXControlMode.PercentOutput, 0);
     }
 

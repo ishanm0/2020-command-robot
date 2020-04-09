@@ -9,33 +9,38 @@ package frc.robot;
 
 import frc.robot.Constants.IntakeConstants;
 import frc.robot.Constants.OIConstants;
-import frc.robot.Constants.ShooterConstants;
+
 import frc.robot.commands.drive.Drive;
 
-import frc.robot.commands.intake.FinishIntake;
-import frc.robot.commands.intake.StartIntake;
+import frc.robot.commands.intake.AutoIntake;
+import frc.robot.commands.intake.ReverseIntakeOuter;
+import frc.robot.commands.intake.ReverseMagazine;
+import frc.robot.commands.intake.ReverseThroat;
+import frc.robot.commands.intake.RunIntakeOuter;
+import frc.robot.commands.intake.RunMagazine;
+import frc.robot.commands.intake.RunThroat;
+import frc.robot.commands.intake.StopIntakeOuter;
 import frc.robot.commands.intake.StopMagazine;
 import frc.robot.commands.intake.StopThroat;
+
 import frc.robot.commands.shooter.AutoShooter;
-
-import frc.robot.commands.shooter.StartShooter;
-import frc.robot.commands.shooter.FinishShooter;
-
 import frc.robot.commands.shooter.RunShooter;
 import frc.robot.commands.shooter.StopShooter;
-import frc.robot.commands.shooter.KillShooter;
 import frc.robot.commands.shooter.ToggleShooter;
-
 import frc.robot.commands.shooter.RunFeeder;
 import frc.robot.commands.shooter.ReverseFeeder;
 import frc.robot.commands.shooter.StopFeeder;
-import frc.robot.commands.shooter.KillFeeder;
 
 import frc.robot.triggers.DPadDown;
+import frc.robot.triggers.DPadDownLeft;
+import frc.robot.triggers.DPadDownRight;
 import frc.robot.triggers.DPadLeft;
 import frc.robot.triggers.DPadRight;
 import frc.robot.triggers.DPadUp;
+import frc.robot.triggers.DPadUpLeft;
+import frc.robot.triggers.DPadUpRight;
 import frc.robot.triggers.LimitSwitch;
+
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
@@ -78,50 +83,46 @@ public class RobotContainer {
      * passing it to a {@link edu.wpi.first.wpilibj2.command.button.JoystickButton}.
      */
     private void configureButtonBindings() {
-        new JoystickButton(OIConstants.joysticks[OIConstants.kIntakeControl[0]], OIConstants.kIntakeControl[1])
-                .whenPressed(() -> new StartIntake(m_intake))
-                .whenReleased(() -> new FinishIntake(m_intake));
+        new JoystickButton(OIConstants.joysticks[OIConstants.kAutoIntakeControl[0]], OIConstants.kAutoIntakeControl[1])
+                .whenHeld(new AutoIntake(m_intake, new LimitSwitch(IntakeConstants.kBaseSwitch),
+                        new LimitSwitch(IntakeConstants.kMagSwitch), new LimitSwitch(IntakeConstants.kTopSwitch)));
 
         new JoystickButton(OIConstants.joysticks[OIConstants.kAutoShooterControl[0]],
-                OIConstants.kAutoShooterControl[1])
-                .whileHeld(new AutoShooter(m_shooter, m_drive));
+                OIConstants.kAutoShooterControl[1]).whenHeld(new AutoShooter(m_shooter, m_drive));
 
-        new JoystickButton(OIConstants.joysticks[OIConstants.kManualShooterControl[0]], OIConstants.kManualShooterControl[1])
-                .whenPressed(() -> new StartShooter(m_shooter))
-                .whenReleased(() -> new FinishShooter(m_shooter));
+        new JoystickButton(OIConstants.joysticks[OIConstants.kCurvatureDriveQuickTurnToggle[0]],
+                OIConstants.kCurvatureDriveQuickTurnToggle[1]).whenPressed(() -> m_drive.setCurvatureQuickTurn(true))
+                        .whenReleased(() -> m_drive.setCurvatureQuickTurn(false));
 
-        new DPadUp(OIConstants.kRunShooterStick)
-                .whenActive(() -> new RunShooter(m_shooter));
+        new DPadUp(OIConstants.kShooterFeederStick).or(new DPadUpLeft(OIConstants.kShooterFeederStick))
+                .or(new DPadUpRight(OIConstants.kShooterFeederStick)).whenActive(() -> new RunShooter(m_shooter))
+                .whenInactive(() -> new StopShooter(m_shooter));
 
-        new DPadDown(OIConstants.kToggleShooterStick)
-                .whenActive(() -> new ToggleShooter(m_shooter));
+        new DPadRight(OIConstants.kShooterFeederStick).or(new DPadUpRight(OIConstants.kShooterFeederStick))
+                .whenActive(() -> new RunFeeder(m_shooter)).whenInactive(() -> new StopFeeder(m_shooter));
 
-        new DPadRight(OIConstants.kKillShooterStick)
-                .whenActive(() -> new KillShooter(m_shooter));
+        new DPadLeft(OIConstants.kShooterFeederStick).or(new DPadUpLeft(OIConstants.kShooterFeederStick))
+                .whenActive(() -> new ReverseFeeder(m_shooter)).whenInactive(() -> new StopFeeder(m_shooter));
 
-        new DPadLeft(OIConstants.kStopShooterStick)
-                .whenActive(() -> new StopShooter(m_shooter));
+        new DPadDown(OIConstants.kShooterFeederStick).whenActive(() -> new ToggleShooter(m_shooter));
 
-        new DPadUp(OIConstants.kRunFeederStick)
-                .whenActive(() -> new RunFeeder(m_shooter));
+        new DPadUp(OIConstants.kIntakeStick).or(new DPadUpLeft(OIConstants.kIntakeStick))
+                .or(new DPadUpRight(OIConstants.kIntakeStick)).whenActive(new RunIntakeOuter(m_intake))
+                .whenActive(new RunThroat(m_intake)).whenInactive(new StopIntakeOuter(m_intake))
+                .whenInactive(new StopThroat(m_intake));
 
-        new DPadDown(OIConstants.kReverseFeederStick)
-                .whenActive(() -> new ReverseFeeder(m_shooter));
+        new DPadRight(OIConstants.kIntakeStick).or(new DPadUpRight(OIConstants.kIntakeStick))
+                .or(new DPadDownRight(OIConstants.kIntakeStick)).whenActive(new RunMagazine(m_intake))
+                .whenInactive(new StopMagazine(m_intake));
 
-        new DPadRight(OIConstants.kKillFeederStick)
-                .whenActive(() -> new KillFeeder(m_shooter));
+        new DPadDown(OIConstants.kIntakeStick).or(new DPadDownLeft(OIConstants.kIntakeStick))
+                .or(new DPadDownRight(OIConstants.kIntakeStick)).whenActive(new ReverseIntakeOuter(m_intake))
+                .whenActive(new ReverseThroat(m_intake)).whenInactive(new StopIntakeOuter(m_intake))
+                .whenInactive(new StopThroat(m_intake));
 
-        new DPadLeft(OIConstants.kStopFeederStick)
-                .whenActive(() -> new StopFeeder(m_shooter));
-
-        new LimitSwitch(IntakeConstants.kTopSwitch)
-                .whenActive(() -> new StopFeeder(m_shooter));
-
-        new LimitSwitch(IntakeConstants.kMagSwitch)
-                .whenActive(() -> new StopMagazine(m_intake));
-        
-        new LimitSwitch(IntakeConstants.kBaseSwitch)
-                .whenActive(() -> new StopThroat(m_intake));
+        new DPadLeft(OIConstants.kIntakeStick).or(new DPadUpLeft(OIConstants.kIntakeStick))
+                .or(new DPadDownLeft(OIConstants.kIntakeStick)).whenActive(new ReverseMagazine(m_intake))
+                .whenInactive(new StopMagazine(m_intake));
     }
 
     /**

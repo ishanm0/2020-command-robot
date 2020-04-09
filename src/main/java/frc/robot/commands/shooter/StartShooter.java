@@ -22,6 +22,7 @@ public class StartShooter extends SequentialCommandGroup {
      * @param shooter The shooter subsystem this command will run on
      */
     public StartShooter(ShooterSubsystem shooter) {
+        addRequirements(shooter);
         addCommands(
                 // Begin running the shooter wheel
                 new RunShooter(shooter),

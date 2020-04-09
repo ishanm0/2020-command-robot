@@ -12,8 +12,8 @@ import edu.wpi.first.wpilibj2.command.SequentialCommandGroup;
 import frc.robot.subsystems.IntakeSubsystem;
 
 /**
- * Runs the starting intake sequence: lowers the intake arm, starts the
- * magazine, starts the outer intake wheels
+ * Runs the starting intake sequence: lowers the intake arm, starts the outer
+ * intake wheels, starts the throat wheels
  */
 public class StartIntake extends SequentialCommandGroup {
     /**
@@ -22,16 +22,14 @@ public class StartIntake extends SequentialCommandGroup {
      * @param intake The intake subsystem this command will run on
      */
     public StartIntake(IntakeSubsystem intake) {
+        addRequirements(intake);
         addCommands(
                 // Lower the intake arm
                 new LowerIntake(intake),
 
-                // Begin spinning the magazine wheels
-                new RunMagazine(intake),
-
                 // Pick up balls (outer)
                 new RunIntakeOuter(intake),
-                
+
                 // Bring balls to magazine
                 new RunThroat(intake));
     }

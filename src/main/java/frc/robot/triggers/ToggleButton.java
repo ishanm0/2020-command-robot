@@ -7,23 +7,30 @@
 
 package frc.robot.triggers;
 
+import edu.wpi.first.networktables.NetworkTableEntry;
+
+import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
+
 import edu.wpi.first.wpilibj2.command.button.Trigger;
 
 import frc.robot.Constants.OIConstants;
 
 /**
- * DPad Up Trigger
+ * Shuffleboard Boolean ToggleButton Trigger
  */
-public class DPadUpRight extends Trigger {
-    private final int id;
+public class ToggleButton extends Trigger {
+    private boolean value;
+    private NetworkTableEntry toggleButtonEntry;
 
-    public DPadUpRight(int joyID) {
-        id = joyID;
+    public ToggleButton(String buttonName, boolean defaultValue) {
+        value = defaultValue;
+        toggleButtonEntry = OIConstants.kTab.add(buttonName, defaultValue).withWidget(BuiltInWidgets.kToggleButton)
+                .getEntry();
     }
 
     @Override
     public boolean get() {
-        return OIConstants.joysticks[id].getPOV(0) <= 67
-                && OIConstants.joysticks[id].getPOV(0) >= 22;
+        value = toggleButtonEntry.getBoolean(value);
+        return value;
     }
 }

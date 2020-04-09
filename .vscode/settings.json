@@ -12,5 +12,7 @@
     "**/.settings": true,
     "**/.factorypath": true,
     "**/*~": true
-  }
+  },
+  "editor.tabSize": 4,
+  "editor.detectIndentation": false
 }

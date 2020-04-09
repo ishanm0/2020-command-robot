@@ -15,7 +15,7 @@ import frc.robot.Constants.OIConstants;
  * DPad Down Left Trigger
  */
 public class DPadDownLeft extends Trigger {
-    private int id;
+    private final int id;
 
     public DPadDownLeft(int joyID) {
         id = joyID;

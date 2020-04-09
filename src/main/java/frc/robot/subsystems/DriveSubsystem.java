@@ -7,6 +7,7 @@
 
 package frc.robot.subsystems;
 
+import java.util.ArrayList;
 import java.util.Map;
 
 import com.analog.adis16470.frc.ADIS16470_IMU;
@@ -20,13 +21,12 @@ import edu.wpi.first.wpilibj.drive.DifferentialDrive;
 import edu.wpi.first.networktables.NetworkTableEntry;
 
 import edu.wpi.first.wpilibj.shuffleboard.BuiltInWidgets;
-import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
-import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
-
+import edu.wpi.first.wpilibj.smartdashboard.SendableChooser;
 import edu.wpi.first.wpilibj2.command.SubsystemBase;
 
 import frc.robot.Constants;
 import frc.robot.Constants.*;
+import frc.robot.triggers.ToggleButton;
 
 /**
  * Drive Subsystem, contains objects and methods needed to drive the robot
@@ -50,50 +50,75 @@ public class DriveSubsystem extends SubsystemBase {
 
     private double insanityFactor = 0.5;
 
-    public static boolean tank = DriveConstants.kTankDefault;
+    public boolean curvatureQuickTurn = false;
+    private boolean reverseDrive = false;
 
-    private ShuffleboardTab tab = Shuffleboard.getTab("SmartDashboard");
-    private NetworkTableEntry insanityFactorEntry = tab.add("insanityFactor", insanityFactor)
-            .withWidget(BuiltInWidgets.kNumberSlider)
-            .withProperties(Map.of("min", 0, "max", 1))
-            .getEntry();
-    private NetworkTableEntry driveToggleEntry = tab.add("driveToggle", tank)
-            .withWidget(BuiltInWidgets.kToggleButton)
-            .getEntry();
-    private NetworkTableEntry lSpeedEntry = tab.add("lSpeed", 0).getEntry();
-    private NetworkTableEntry rSpeedEntry = tab.add("rSpeed", 0).getEntry();
-    
-    private NetworkTableEntry ySpeedEntry = tab.add("ySpeed", 0).getEntry();
-    private NetworkTableEntry zSpeedEntry = tab.add("zSpeed", 0).getEntry();
-    
-    private NetworkTableEntry leftEncoderEntry = tab.add("leftEncoder", 0).getEntry();
-    private NetworkTableEntry rightEncoderEntry = tab.add("rightEncoder", 0).getEntry();
+    private final SendableChooser<String> m_driveModeChooser = new SendableChooser<>();
+    private ArrayList<String> kDriveModeOptions = new ArrayList<String>();
+    public int driveMode = DriveConstants.kDriveModeDefault;
+    private String m_driveModeSelected;
+
+    private NetworkTableEntry insanityFactorEntry = OIConstants.kTab.add("insanityFactor", insanityFactor)
+            .withWidget(BuiltInWidgets.kNumberSlider).withProperties(Map.of("min", 0, "max", 1)).getEntry();
+    private NetworkTableEntry lSpeedEntry = OIConstants.kTab.add("lSpeed", 0).getEntry();
+    private NetworkTableEntry rSpeedEntry = OIConstants.kTab.add("rSpeed", 0).getEntry();
+
+    private NetworkTableEntry ySpeedEntry = OIConstants.kTab.add("ySpeed", 0).getEntry();
+    private NetworkTableEntry zSpeedEntry = OIConstants.kTab.add("zSpeed", 0).getEntry();
+
+    private ToggleButton curvatureQuickTurnButton = new ToggleButton("quickTurn", curvatureQuickTurn);
+    private ToggleButton reverseDriveButton = new ToggleButton("reverseDrive", reverseDrive);
+
+    private NetworkTableEntry leftEncoderEntry = OIConstants.kTab.add("leftEncoder", 0).getEntry();
+    private NetworkTableEntry rightEncoderEntry = OIConstants.kTab.add("rightEncoder", 0).getEntry();
 
     public DriveSubsystem() {
-        m_leftTalon1.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, DriveConstants.kPIDLoopIdx, Constants.kTimeoutMs);
-        m_rightTalon1.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, DriveConstants.kPIDLoopIdx, Constants.kTimeoutMs);
+        m_leftTalon1.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, DriveConstants.kPIDLoopIdx,
+                Constants.kTimeoutMs);
+        m_rightTalon1.configSelectedFeedbackSensor(FeedbackDevice.CTRE_MagEncoder_Relative, DriveConstants.kPIDLoopIdx,
+                Constants.kTimeoutMs);
 
         resetEncoders();
 
-        tab.add("m_leftTalon1", m_leftTalon1);
-        tab.add("m_rightTalon1", m_rightTalon1);
+        OIConstants.kTab.add("m_leftTalon1", m_leftTalon1);
+        OIConstants.kTab.add("m_rightTalon1", m_rightTalon1);
 
         kIMU.setYawAxis(IMUAxis.kZ);
+
+        kDriveModeOptions.add("Tank");
+        kDriveModeOptions.add("Arcade");
+        kDriveModeOptions.add("Curvature");
+
+        m_driveModeChooser.setDefaultOption(kDriveModeOptions.get(driveMode), kDriveModeOptions.get(driveMode));
+
+        for (int i = 0; i < kDriveModeOptions.size(); i++) {
+            if (i != driveMode) {
+                m_driveModeChooser.addOption(kDriveModeOptions.get(i), kDriveModeOptions.get(i));
+            }
+        }
+
+        OIConstants.kTab.add(m_driveModeChooser);
     }
 
     @Override
     public void periodic() {
         insanityFactor = insanityFactorEntry.getDouble(insanityFactor);
-        tank = driveToggleEntry.getBoolean(tank);
+        reverseDrive = reverseDriveButton.get();
 
         leftEncoderEntry.forceSetNumber(m_leftTalon1.getSelectedSensorVelocity());
         rightEncoderEntry.forceSetNumber(m_rightTalon1.getSelectedSensorVelocity());
+
+        m_driveModeSelected = m_driveModeChooser.getSelected();
+        driveMode = kDriveModeOptions.indexOf(m_driveModeSelected);
+        if (driveMode < 0 || driveMode >= kDriveModeOptions.size()) {
+            driveMode = DriveConstants.kDriveModeDefault;
+        }
     }
-    
+
     /**
-     * Drives the robot at given left/right speeds. Speeds range from [-1, 1].
+     * Drives the robot at given left/right speeds. Speeds range in [-1, 1].
      * 
-     * @param leftSpeed speed for left wheels
+     * @param leftSpeed  speed for left wheels
      * @param rightSpeed speed for right wheels
      */
     public void tankDrive(double leftSpeed, double rightSpeed) {
@@ -101,13 +126,28 @@ public class DriveSubsystem extends SubsystemBase {
     }
 
     /**
-     * Drives the robot at given y/z (rotation) speeds. Speeds range from [-1, 1].
+     * Drives the robot at given y/z (rotation) speeds. Speeds range in [-1, 1].
      * 
      * @param ySpeed speed in forward/backward direction
      * @param zSpeed rotational speed
      */
     public void arcadeDrive(double ySpeed, double zSpeed) {
         m_drive.arcadeDrive(insanityFactor * ySpeed, insanityFactor * zSpeed, false);
+        // TODO: does arcade zSpeed need insanityFactor?
+    }
+
+    /**
+     * Drives the robot at given y/z (rotation) speeds. Speeds range in [1, 1].
+     * 
+     * @param ySpeed      spead in forward/backward direction
+     * @param zSpeed      controls curvature of robot's path, instead of direct
+     *                    rotational speed
+     * @param isQuickTurn if true, zSpeed controls direct rotational speed (like
+     *                    arcadeDrive). If false, typical curvatureDrive
+     */
+    public void curvatureDrive(double ySpeed, double zSpeed, boolean isQuickTurn) {
+        m_drive.curvatureDrive(insanityFactor * ySpeed, insanityFactor * zSpeed, isQuickTurn);
+        // TODO: does curvature zSpeed need insanityFactor?
     }
 
     /**
@@ -115,29 +155,55 @@ public class DriveSubsystem extends SubsystemBase {
      * 
      * @param lSpeed tank drive left speed
      * @param rSpeed tank drive right speed
-     * @param ySpeed arcade drive linear speed
-     * @param zSpeed arcade drive rotation speed
+     * @param ySpeed arcade/curvature drive linear speed
+     * @param zSpeed arcade/curvature drive rotation speed
      */
     public void drive(double lSpeed, double rSpeed, double ySpeed, double zSpeed) {
-        if (getTank()) {
-            tankDrive(lSpeed, rSpeed);
+        curvatureQuickTurn = curvatureQuickTurnButton.get();
+        
+        if (reverseDrive) {
+            switch (driveMode) {
+                case 0:
+                    tankDrive(-rSpeed, -lSpeed);
+                    break;
+                case 1:
+                    arcadeDrive(-ySpeed, zSpeed);
+                    break;
+                case 2:
+                    curvatureDrive(-ySpeed, zSpeed, curvatureQuickTurn);
+                    break;
+            }
         } else {
-            arcadeDrive(ySpeed, zSpeed);
+            switch (driveMode) {
+                case 0:
+                    tankDrive(lSpeed, rSpeed);
+                    break;
+                case 1:
+                    arcadeDrive(ySpeed, zSpeed);
+                    break;
+                case 2:
+                    curvatureDrive(ySpeed, zSpeed, curvatureQuickTurn);
+                    break;
+            }
         }
 
         lSpeedEntry.forceSetDouble(lSpeed);
         rSpeedEntry.forceSetDouble(rSpeed);
+
         ySpeedEntry.forceSetDouble(ySpeed);
         zSpeedEntry.forceSetDouble(zSpeed);
     }
 
     /**
-     * @return the value of the tank/arcade boolean (tank if true, arcade if false)
+     * Set whether robot quickTurns in curvature drive
+     * 
+     * @param input if true, curvature zSpeed directly controls rotation; if false,
+     *              curvature zSpeed controls curvature of robot's path
      */
-    public boolean getTank() {
-        return tank;
+    public void setCurvatureQuickTurn(boolean input) {
+        curvatureQuickTurn = input;
     }
-    
+
     /**
      * Zeroes the heading of the robot.
      */

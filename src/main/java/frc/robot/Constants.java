@@ -9,8 +9,12 @@ package frc.robot;
 
 import com.analog.adis16470.frc.ADIS16470_IMU;
 
+import edu.wpi.first.networktables.NetworkTable;
+import edu.wpi.first.networktables.NetworkTableInstance;
 import edu.wpi.first.wpilibj.Joystick;
 import edu.wpi.first.wpilibj.kinematics.DifferentialDriveKinematics;
+import edu.wpi.first.wpilibj.shuffleboard.Shuffleboard;
+import edu.wpi.first.wpilibj.shuffleboard.ShuffleboardTab;
 import edu.wpi.first.wpilibj.util.Units;
 
 /**
@@ -48,7 +52,7 @@ public final class Constants {
 
         public static final int kPIDLoopIdx = 0;
 
-        public static final boolean kTankDefault = false;
+        public static final int kDriveModeDefault = 1; // 0 = tank, 1 = arcade, 2 = curvature
     }
 
     public static final class OIConstants {
@@ -56,28 +60,37 @@ public final class Constants {
         private static final int kRightJoystickPort = 1;
 
         // The joysticks
-        private static final Joystick kLeftJoystick = new Joystick(/* OIConstants. */kLeftJoystickPort);
-        private static final Joystick kRightJoystick = new Joystick(/* OIConstants. */kRightJoystickPort);
+        private static final Joystick kLeftJoystick = new Joystick(kLeftJoystickPort);
+        private static final Joystick kRightJoystick = new Joystick(kRightJoystickPort);
 
         public static final Joystick[] joysticks = { kLeftJoystick, kRightJoystick };
 
-        public static final int[] kIntakeControl = { 0, 1 }; // left joystick, trigger
+        public static final int[] kCurvatureDriveQuickTurnToggle = { 1, 2 }; // right joystick, thumb side button
+
+        public static final int[] kAutoIntakeControl = { 0, 1 }; // left joystick, trigger
 
         public static final int[] kAutoShooterControl = { 1, 1 }; // right joystick, trigger
-        public static final int[] kManualShooterControl = { 1, 2 }; // right joystick, thumb side button
 
-        public static final int kToggleShooterStick = 1;
-        public static final int kRunShooterStick = 1;
-        public static final int kStopShooterStick = 1;
-        public static final int kKillShooterStick = 1;
-
-        public static final int kRunFeederStick = 0;
-        public static final int kStopFeederStick = 0;
-        public static final int kKillFeederStick = 0;
-        public static final int kReverseFeederStick = 0;
+        public static final int kShooterFeederStick = 1;
+        public static final int kIntakeStick = 0;
 
         public static final int[] kRotation = { 0, 3 }; // left joystick, bottom left thumb button
         public static final int[] kPosition = { 0, 4 }; // left joystick, bottom right thumb button
+
+        /**
+         * Get the default instance of NetworkTables that was created automatically when
+         * your program starts
+         */
+        private static final NetworkTableInstance kInst = NetworkTableInstance.getDefault();
+
+        /*
+         * Get the table within that instance that contains the data. There can be as
+         * many tables as you like and exist to make it easier to organize your data. In
+         * this case, it's a table called datatable.
+         */
+        public static final NetworkTable kTable = kInst.getTable("SmartDashboard");
+
+        public static final ShuffleboardTab kTab = Shuffleboard.getTab("SmartDashboard");
     }
 
     public static final class IntakeConstants {
@@ -92,7 +105,7 @@ public final class Constants {
 
         public static final double kIntakeOuterSpeed = 0.5;
 
-        public static final double kIntakeFlatSpeed = 0.5;
+        public static final double kThroatSpeed = 0.5;
 
         public static final double kMagazineSpeed = 0.5;
 
@@ -106,7 +119,7 @@ public final class Constants {
             public static final int kFeederTalonPort = 12;
 
             public static final double kSpeed = 0.75;
-            
+
             public static final int kPIDLoopIdx = 0;
 
             public static final boolean kSensorPhase = true;
@@ -118,14 +131,17 @@ public final class Constants {
 
             public static final double kSpeed = 0.75;
         }
-        
+
         public final static double kMaxTurnSpeed = 0.5;
 
         public final static int kPixelWidth = 160;
         public final static int kPixelHeight = 120;
 
+        public static final int kXShiftFactor = 1;
+        public static final int kYShiftFactor = 1;
+
         public static final double kAccelThreshold = 0.05;
-        
+
         public static final int[] kShooterSolenoidPorts = { 2, 3 };
     }
 

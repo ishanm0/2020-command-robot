@@ -57,11 +57,11 @@ public class IntakeSubsystem extends SubsystemBase {
     }
 
     /**
-     * Runs the two throat wheels at set speeds.
+     * Runs the throat wheels at set speeds.
      */
     public void runThroat() {
-        m_intakeLeft.set(IntakeConstants.kIntakeFlatSpeed);
-        m_intakeRight.set(IntakeConstants.kIntakeFlatSpeed);
+        m_intakeLeft.set(IntakeConstants.kThroatSpeed);
+        m_intakeRight.set(IntakeConstants.kThroatSpeed);
     }
 
     /**
@@ -69,21 +69,6 @@ public class IntakeSubsystem extends SubsystemBase {
      */
     public void runIntakeOuter() {
         m_intakeOuter.set(IntakeConstants.kIntakeOuterSpeed);
-    }
-
-    /**
-     * Stops the two throat wheels.
-     */
-    public void stopThroat() {
-        m_intakeLeft.set(0);
-        m_intakeRight.set(0);
-    }
-
-    /**
-     * Runs the outer intake wheels
-     */
-    public void stopIntakeOuter() {
-        m_intakeOuter.set(0);
     }
     
     /**
@@ -94,6 +79,44 @@ public class IntakeSubsystem extends SubsystemBase {
         m_magazineRight.set(IntakeConstants.kMagazineSpeed);
     }
 
+    /**
+     * Runs the throat wheels at set speeds in reverse.
+     */
+    public void reverseThroat() {
+        m_intakeLeft.set(-IntakeConstants.kThroatSpeed);
+        m_intakeRight.set(-IntakeConstants.kThroatSpeed);
+    }
+
+    /**
+     * Runs the outer intake wheels at set speeds in reverse.
+     */
+    public void reverseIntakeOuter() {
+        m_intakeOuter.set(-IntakeConstants.kIntakeOuterSpeed);
+    }
+    
+    /**
+     * Runs the magazine wheels at set speeds in reverse.
+     */
+    public void reverseMagazine() {
+        m_magazineLeft.set(-IntakeConstants.kMagazineSpeed);
+        m_magazineRight.set(-IntakeConstants.kMagazineSpeed);
+    }
+
+    /**
+     * Stops the throat wheels.
+     */
+    public void stopThroat() {
+        m_intakeLeft.set(0);
+        m_intakeRight.set(0);
+    }
+
+    /**
+     * Stops the outer intake wheels
+     */
+    public void stopIntakeOuter() {
+        m_intakeOuter.set(0);
+    }
+    
     /**
      * Stops the magazine wheels.
      */
