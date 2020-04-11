@@ -44,7 +44,7 @@ import frc.robot.triggers.LimitSwitch;
 import frc.robot.subsystems.DriveSubsystem;
 import frc.robot.subsystems.IntakeSubsystem;
 import frc.robot.subsystems.ShooterSubsystem;
-
+import frc.robot.subsystems.TrenchSubsystem;
 import edu.wpi.first.wpilibj2.command.Command;
 import edu.wpi.first.wpilibj2.command.button.JoystickButton;
 
@@ -60,6 +60,7 @@ public class RobotContainer {
     private final DriveSubsystem m_drive = new DriveSubsystem();
     private final IntakeSubsystem m_intake = new IntakeSubsystem();
     private final ShooterSubsystem m_shooter = new ShooterSubsystem();
+    // private final TrenchSubsystem m_trench = new TrenchSubsystem();
 
     // The default driving command
     public final Drive m_driveCommand = new Drive(m_drive);

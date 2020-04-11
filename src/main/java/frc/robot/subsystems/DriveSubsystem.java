@@ -159,8 +159,6 @@ public class DriveSubsystem extends SubsystemBase {
      * @param zSpeed arcade/curvature drive rotation speed
      */
     public void drive(double lSpeed, double rSpeed, double ySpeed, double zSpeed) {
-        curvatureQuickTurn = curvatureQuickTurnButton.get();
-        
         if (reverseDrive) {
             switch (driveMode) {
                 case 0:
@@ -192,6 +190,8 @@ public class DriveSubsystem extends SubsystemBase {
 
         ySpeedEntry.forceSetDouble(ySpeed);
         zSpeedEntry.forceSetDouble(zSpeed);
+
+        curvatureQuickTurnButton.getEntry().forceSetBoolean(curvatureQuickTurn);
     }
 
     /**

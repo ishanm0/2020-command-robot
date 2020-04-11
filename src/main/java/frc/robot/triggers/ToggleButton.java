@@ -28,6 +28,10 @@ public class ToggleButton extends Trigger {
                 .getEntry();
     }
 
+    public NetworkTableEntry getEntry() {
+        return toggleButtonEntry;
+    }
+
     @Override
     public boolean get() {
         value = toggleButtonEntry.getBoolean(value);
